@@ -1,0 +1,31 @@
+#mSystemNotice:hover{
+    -fx-background-color: #0066e2;
+}
+
+#mSellHouseManager:hover{
+    -fx-background-color: #0066e2;
+}
+
+#mHouseInformationQuery:hover{
+    -fx-background-color: #0066e2;
+}
+
+#mPublicNoticeManager:hover{
+    -fx-background-color: #0066e2;
+}
+
+#mMyFavoriteHouses:hover{
+    -fx-background-color: #0066e2;
+}
+
+#mPersonalInformationManager:hover{
+    -fx-background-color: #0066e2;
+}
+
+#mExitButton{
+    -fx-background-color: #ff461f;
+}
+
+#mExitButton:hover{
+    -fx-background-color: #ed5736;
+}

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="main.java.controller.User.UserController"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <AnchorPane prefHeight="498.0" prefWidth="158.0" style="-fx-background-color: #647efc;">
+            <children>
+                <Label fx:id="mSystemNotice" alignment="CENTER" contentDisplay="CENTER" layoutX="0.0"
+                       layoutY="150.0" onMouseClicked="#mSystemNoticeCliecked" prefHeight="36.0" prefWidth="158.0"
+                       text="系统公告" textFill="WHITE">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="mSellHouseManager" alignment="CENTER" contentDisplay="CENTER" layoutX="0.0"
+                       layoutY="186.0" onMouseClicked="#mSellHouseManagerCliecked" prefHeight="36.0" prefWidth="158.0"
+                       text="出售房源管理" textFill="WHITE">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="mHouseInformationQuery" alignment="CENTER" layoutX="0.0" layoutY="222.0"
+                       onMouseClicked="#mHouseInformationQueryClicked" prefHeight="36.0" prefWidth="158.0" text="房源信息查询"
+                       textFill="WHITE">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="mPublicNoticeManager" alignment="CENTER" layoutX="0.0" layoutY="258.0"
+                       onMouseClicked="#mPublicNoticeManagerClicked" prefHeight="36.0" prefWidth="158.0" text="发布公告管理"
+                       textFill="WHITE">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="mMyFavoriteHouses" alignment="CENTER" layoutX="0.0" layoutY="294.0"
+                       onMouseClicked="#mMyFavoriteHousesClicked" prefHeight="36.0" prefWidth="158.0" text="我的心仪房源"
+                       textFill="WHITE">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="mPersonalInformationManager" alignment="CENTER" layoutX="0.0" layoutY="330.0"
+                       onMouseClicked="#mPersonalInformationManagerClicked" prefHeight="36.0" prefWidth="158.0"
+                       text="个人信息管理" textFill="WHITE">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <Button fx:id="mExitButton" layoutX="14.0" layoutY="443.0" mnemonicParsing="false" prefHeight="35.0"
+                        prefWidth="130.0" text="退   出" textFill="WHITE" onAction="#mExitButtonClicked">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Button>
+                <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="28.0" layoutY="16.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@../../assets/icon.png"/>
+                    </image>
+                </ImageView>
+                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="0.0" layoutY="115.0" prefHeight="25.0"
+                       prefWidth="158.0" text="username">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="12.0" layoutY="384.0" prefHeight="35.0" prefWidth="74.0" text="当前角色：" textFill="WHITE">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="79.0" layoutY="384.0" prefHeight="35.0" prefWidth="74.0" text="普通用户">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="mContainer" layoutX="158.0" prefHeight="500.0" prefWidth="665.0"/>
+    </children>
+    <stylesheets>
+        <URL value="@../../css/user.css"/>
+    </stylesheets>
+</AnchorPane>

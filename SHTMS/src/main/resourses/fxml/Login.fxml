@@ -15,10 +15,10 @@
     <children>
         <ImageView fitHeight="411.0" fitWidth="720.0" layoutX="-1.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@assets/bg.jpg" />
+                <Image url="@../assets/bg.jpg" />
             </image>
         </ImageView>
-        <AnchorPane layoutX="506.0" layoutY="-2.0" prefHeight="411.0" prefWidth="213.0" style="-fx-background-color: rgba(255,255,255,0.8);">
+        <AnchorPane layoutX="506.0" layoutY="-2.0" prefHeight="411.0" prefWidth="213.0" style="-fx-background-color: rgba(255,255,255,0.6);">
             <children>
                 <Label contentDisplay="CENTER" layoutX="57.0" layoutY="7.0" prefHeight="47.0" prefWidth="98.0" text="系统登录">
                     <font>
@@ -29,13 +29,16 @@
                 <PasswordField fx:id="mPasswordField" layoutX="33.0" layoutY="212.0" prefHeight="23.0" prefWidth="149.0" promptText="密    码" />
                 <RadioButton fx:id="mUserRadioButton" layoutX="26.0" layoutY="257.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="73.0" text="普通用户" />
                 <RadioButton fx:id="mAdminRadioButton" layoutX="124.0" layoutY="257.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="62.0" text="管理员" />
-                <Label fx:id="mRegisterLabel" layoutX="155.0" layoutY="364.0" prefWidth="33.0" text="注册" />
+                <Label fx:id="mRegisterLabel" alignment="CENTER" layoutX="143.0" layoutY="364.0" onMouseClicked="#mRegisterLabelClicked" prefHeight="25.0" prefWidth="45.0" style="-fx-background-color: #336699;" text="注册" textFill="WHITE" />
                 <ImageView fitHeight="98.0" fitWidth="98.0" layoutX="57.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@assets/icon.png" />
+                        <Image url="@../assets/icon.png" />
                     </image>
                 </ImageView>
-                <Label fx:id="mResultLabel" disable="true" layoutX="26.0" layoutY="288.0" text="用户名或密码错误" visible="false" />
+                <Label fx:id="mResultLabel" disable="true" layoutX="26.0" layoutY="288.0" text="用户名或密码错误" textFill="RED">
+               <font>
+                  <Font size="13.0" />
+               </font></Label>
             </children></AnchorPane>
         <Label layoutX="221.0" layoutY="7.0" prefHeight="47.0" prefWidth="278.0" text="二 手 房 交 易 管 理 系 统">
             <font>
@@ -45,6 +48,6 @@
 
     </children>
     <stylesheets>
-        <URL value="@css/login.css" />
+        <URL value="@../css/login.css" />
     </stylesheets>
 </AnchorPane>
