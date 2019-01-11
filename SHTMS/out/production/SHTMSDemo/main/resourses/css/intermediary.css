@@ -1,0 +1,19 @@
+#mManagerHouseBuy:hover{
+    -fx-background-color: #0066e2;
+}
+
+#mManagerTransactionInformation:hover{
+    -fx-background-color: #0066e2;
+}
+
+#mPersonalInformationManager:hover{
+    -fx-background-color: #0066e2;
+}
+
+#mExitButton{
+    -fx-background-color: #ff461f;
+}
+
+#mExitButton:hover{
+    -fx-background-color: #ed5736;
+}

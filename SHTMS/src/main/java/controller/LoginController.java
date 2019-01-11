@@ -9,7 +9,7 @@ import main.java.Constant;
 import main.java.app.MainApp;
 import java.net.URL;
 import java.util.ResourceBundle;
-import static main.java.Constant.ADMIN_TYPE;
+import static main.java.Constant.INTERMEDIARY_TYPE;
 import static main.java.Constant.USER_TYPE;
 
 
@@ -24,7 +24,7 @@ public class LoginController implements Initializable{
     @FXML
     private RadioButton mUserRadioButton;
     @FXML
-    private RadioButton mAdminRadioButton;
+    private RadioButton mIntermediaryRadioButton;
     @FXML
     private Label mResultLabel;
     @FXML
@@ -38,7 +38,7 @@ public class LoginController implements Initializable{
         setResult(false, "");
         group = new ToggleGroup();
         mUserRadioButton.setToggleGroup(group);
-        mAdminRadioButton.setToggleGroup(group);
+        mIntermediaryRadioButton.setToggleGroup(group);
         mUserRadioButton.setSelected(true);
 
     }
@@ -46,7 +46,7 @@ public class LoginController implements Initializable{
     public void onLoginButtonClicked(ActionEvent actionEvent) {
         String username = mUsernameTextField.getText();
         String password = mPasswordField.getText();
-        roleType = mUserRadioButton.isSelected() ? USER_TYPE : ADMIN_TYPE;
+        roleType = mUserRadioButton.isSelected() ? USER_TYPE : INTERMEDIARY_TYPE;
         if (username.length() == 0 || password.length() == 0) {
             setResult(true, Constant.IS_EMPTY);
         } else if (password.length() < 6){
@@ -55,7 +55,7 @@ public class LoginController implements Initializable{
             if (roleType == USER_TYPE)
                 MainApp.getApp().toUser();
             else
-                MainApp.getApp().toAdmin();
+                MainApp.getApp().toIntermediary();
         }
 
     }

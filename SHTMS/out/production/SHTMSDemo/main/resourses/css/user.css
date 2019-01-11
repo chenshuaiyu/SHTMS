@@ -1,16 +1,12 @@
-#mSystemNotice:hover{
-    -fx-background-color: #0066e2;
-}
-
 #mSellHouseManager:hover{
     -fx-background-color: #0066e2;
 }
 
-#mHouseInformationQuery:hover{
+#mHouseSellProgress:hover{
     -fx-background-color: #0066e2;
 }
 
-#mPublicNoticeManager:hover{
+#mQueryTargetHouse:hover{
     -fx-background-color: #0066e2;
 }
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.QueryHouseController">
+    <children>
+        <Label layoutX="40.0" layoutY="30.0" text="省份"/>
+        <Label layoutX="245.0" layoutY="30.0" text="市"/>
+        <Label layoutX="433.0" layoutY="30.0" text="区/县"/>
+        <Label layoutX="37.0" layoutY="108.0" text="小区"/>
+        <Label layoutX="236.0" layoutY="108.0" text="层"/>
+        <Label layoutX="433.0" layoutY="108.0" text="面积"/>
+        <Label layoutX="37.0" layoutY="193.0" text="价格"/>
+        <Label layoutX="242.0" layoutY="193.0" text="室"/>
+        <Label layoutX="433.0" layoutY="193.0" text="厅"/>
+        <JFXTextField fx:id="mProvinceTextField" layoutX="40.0" layoutY="53.0"/>
+        <JFXTextField fx:id="mCityTextField" layoutX="245.0" layoutY="53.0"/>
+        <JFXTextField fx:id="mCountyTextField" layoutX="433.0" layoutY="53.0"/>
+        <JFXTextField fx:id="mCommunityTextField" layoutX="40.0" layoutY="131.0"/>
+        <JFXTextField fx:id="mFloorTextField" layoutX="235.0" layoutY="131.0"/>
+        <ChoiceBox fx:id="mAreaTextField" layoutX="432.0" layoutY="131.0" prefWidth="150.0"/>
+        <ChoiceBox fx:id="mPriceTextField" layoutX="39.0" layoutY="222.0" prefWidth="150.0"/>
+        <JFXTextField fx:id="mRoomTextField" layoutX="235.0" layoutY="222.0"/>
+        <JFXTextField fx:id="mLivingRoomTextField" layoutX="433.0" layoutY="222.0"/>
+        <Button fx:id="mQueryButton" layoutX="177.0" layoutY="321.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="77.0" text="查询" onMouseClicked="#mQueryButtonClicked"/>
+        <Button fx:id="mCancelButton" layoutX="344.0" layoutY="321.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="77.0" text="取消" onMouseClicked="#mCancelButtonClicked"/>
+    </children>
+</AnchorPane>

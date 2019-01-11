@@ -12,13 +12,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import main.java.Constant;
 import main.java.app.MainApp;
+import main.java.db.JDBCHelper;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import static main.java.Constant.USELLHOUSE_PAGE;
+import static main.java.Constant.USELLHOUSEMANAGER_PAGE;
 
 
 public class UserController implements Initializable {
@@ -27,18 +29,16 @@ public class UserController implements Initializable {
     private static final int TYPE2 = 2;
     private static final int TYPE3 = 3;
     private static final int TYPE4 = 4;
-    private static final int TYPE5 = 5;
 
+    private int currentType = -1;
     private ArrayList<Label> labels = new ArrayList<>();
 
     @FXML
-    private Label mSystemNotice;
-    @FXML
     private Label mSellHouseManager;
     @FXML
-    private Label mHouseInformationQuery;
+    private Label mHouseSellProgress;
     @FXML
-    private Label mPublicNoticeManager;
+    private Label mQueryTargetHouse;
     @FXML
     private Label mMyFavoriteHouses;
     @FXML
@@ -50,60 +50,58 @@ public class UserController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        labels.add(mSystemNotice);
         labels.add(mSellHouseManager);
-        labels.add(mHouseInformationQuery);
-        labels.add(mPublicNoticeManager);
+        labels.add(mHouseSellProgress);
+        labels.add(mQueryTargetHouse);
         labels.add(mMyFavoriteHouses);
         labels.add(mPersonalInformationManager);
 
-        setSelected(TYPE0);
+        setSelected(TYPE0, USELLHOUSEMANAGER_PAGE);
+        currentType = TYPE0;
     }
 
-    public void mSystemNoticeCliecked(MouseEvent mouseEvent) {
-        setSelected(TYPE0);
+    public void mSellHouseManagerClicked(MouseEvent mouseEvent) {
+        setSelected(TYPE0, USELLHOUSEMANAGER_PAGE);
     }
 
-    public void mSellHouseManagerCliecked(MouseEvent mouseEvent) {
-        setSelected(TYPE1);
-        try {
-            mContainer.getChildren().setAll((AnchorPane) FXMLLoader.load(getClass().getResource(USELLHOUSE_PAGE)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void mHouseSellProgressClicked(MouseEvent mouseEvent) {
+        setSelected(TYPE1, Constant.UHOUSESELLPROGRESS_PAGE);
     }
 
-    public void mHouseInformationQueryClicked(MouseEvent mouseEvent) {
-        setSelected(TYPE2);
-    }
-
-    public void mPublicNoticeManagerClicked(MouseEvent mouseEvent) {
-        setSelected(TYPE3);
+    public void mQueryTargetHouseClicked(MouseEvent mouseEvent) {
+        setSelected(TYPE2, Constant.UQUERYTARGETHOUSE_PAGE);
     }
 
     public void mMyFavoriteHousesClicked(MouseEvent mouseEvent) {
-        setSelected(TYPE4);
+        setSelected(TYPE3, Constant.UMYFAVORITEHOUSES_PAGE);
     }
 
     public void mPersonalInformationManagerClicked(MouseEvent mouseEvent) {
-        setSelected(TYPE5);
+        setSelected(TYPE4, Constant.UPERSONALINFORMATIONMANAGER_PAGE);
     }
 
     public void mExitButtonClicked(ActionEvent actionEvent) {
         MainApp.getApp().toLogin();
     }
 
-    private void setSelected(int type) {
-        labels.get(type).setTextFill(Constant.SELECTED_COLOR);
-        labels.get(type).setFont(Font.font("Timer New Roman", FontWeight.BOLD, 14));
-        for (int i = 0; i < labels.size(); i++) {
-            if (i != type){
-                labels.get(i).setTextFill(Constant.UNSELECTED_COLOR);
-                labels.get(i).setFont(Font.font("Timer New Roman", FontWeight.NORMAL, 14));
+    private void setSelected(int type, String url) {
+        if (type != currentType) {
+            labels.get(type).setTextFill(Constant.SELECTED_COLOR);
+            labels.get(type).setFont(Font.font("Timer New Roman", FontWeight.BOLD, 14));
+            for (int i = 0; i < labels.size(); i++) {
+                if (i != type) {
+                    labels.get(i).setTextFill(Constant.UNSELECTED_COLOR);
+                    labels.get(i).setFont(Font.font("Timer New Roman", FontWeight.NORMAL, 14));
+                }
             }
+            try {
+                mContainer.getChildren().setAll((AnchorPane) FXMLLoader.load(getClass().getResource("../" + url)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            currentType = type;
         }
     }
-
 
 
 }

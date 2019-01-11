@@ -38,8 +38,8 @@ public class MainApp extends Application {
         toPage(Constant.USER_PAGE, 820, 498);
     }
 
-    public void toAdmin() {
-        toPage(Constant.ADMIN_PAGE, 820, 498);
+    public void toIntermediary() {
+        toPage(Constant.INTERMEDIARY_PAGE, 820, 498);
     }
 
     public void toLogin() {
@@ -49,8 +49,6 @@ public class MainApp extends Application {
     public void toRegister() {
         toPage(Constant.REGISTER_PAGE, 485, 515);
     }
-
-
 
     private void toPage(String fxml, int width, int height) {
         try {

@@ -32,7 +32,7 @@ public class RegisterController implements Initializable {
     @FXML
     public RadioButton mUserRadioButton;
     @FXML
-    public RadioButton mAdminRadioButton;
+    public RadioButton mIntermediaryRadioButton;
     @FXML
     public Button mRegisterButton;
     @FXML
@@ -45,7 +45,7 @@ public class RegisterController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         group = new ToggleGroup();
         mUserRadioButton.setToggleGroup(group);
-        mAdminRadioButton.setToggleGroup(group);
+        mIntermediaryRadioButton.setToggleGroup(group);
         mUserRadioButton.setSelected(true);
     }
 
