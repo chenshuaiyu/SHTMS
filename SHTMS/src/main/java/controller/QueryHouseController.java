@@ -5,12 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
-import main.java.QueryHouseListener;
+import main.java.listener.QueryHouseListener;
+import main.java.bean.House;
 
-/**
- * Coder : chenshuaiyu
- * Time : 2019/1/11 14:06
- */
+
 public class QueryHouseController {
     @FXML
     public JFXTextField mProvinceTextField;
@@ -35,9 +33,9 @@ public class QueryHouseController {
     @FXML
     public Button mCancelButton;
 
-    private static QueryHouseListener listener;
+    private QueryHouseListener listener;
 
-    public static void setQueryHouse(QueryHouseListener l){
+    public void setQueryHouseListener(QueryHouseListener l) {
         listener = l;
     }
 
@@ -52,7 +50,7 @@ public class QueryHouseController {
         String romm = mRoomTextField.getText();
         String livingRoom = mLivingRoomTextField.getText();
 
-        listener.query(province);
+        listener.query(new House());
 
     }
 

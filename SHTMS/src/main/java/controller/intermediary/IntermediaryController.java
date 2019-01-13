@@ -36,10 +36,13 @@ public class IntermediaryController implements Initializable {
     @FXML
     private Button mExitButton;
     @FXML
-    public AnchorPane mContainer;
+    private AnchorPane mContainer;
+    @FXML
+    private Label mUsernameLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        mUsernameLabel.setText(Constant.NAME);
         labels.add(mManagerHouseBuy);
         labels.add(mManagerTransactionInformation);
         labels.add(mPersonalInformationManager);

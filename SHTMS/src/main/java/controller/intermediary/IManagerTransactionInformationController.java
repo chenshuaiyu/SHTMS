@@ -1,8 +1,23 @@
 package main.java.controller.intermediary;
 
-/**
- * Coder : chenshuaiyu
- * Time : 2019/1/8 22:37
- */
-public class IManagerTransactionInformationController {
+
+import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class IManagerTransactionInformationController implements Initializable {
+    public ListView mListView;
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+
+
+
+
 }

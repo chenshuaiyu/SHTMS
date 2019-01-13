@@ -1,9 +1,6 @@
 package main.java.bean;
 
-/**
- * Coder : chenshuaiyu
- * Time : 2019/1/11 9:50
- */
+
 public class User {
     private String userName;
     private String name;

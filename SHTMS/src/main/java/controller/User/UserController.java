@@ -30,9 +30,12 @@ public class UserController implements Initializable {
     private static final int TYPE3 = 3;
     private static final int TYPE4 = 4;
 
+
     private int currentType = -1;
     private ArrayList<Label> labels = new ArrayList<>();
 
+    @FXML
+    public Label mUsernameLabel;
     @FXML
     private Label mSellHouseManager;
     @FXML
@@ -50,6 +53,7 @@ public class UserController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        mUsernameLabel.setText(Constant.NAME);
         labels.add(mSellHouseManager);
         labels.add(mHouseSellProgress);
         labels.add(mQueryTargetHouse);

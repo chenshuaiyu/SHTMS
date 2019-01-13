@@ -7,16 +7,18 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import main.java.Constant;
 import main.java.app.MainApp;
+import main.java.db.JDBCHelper;
+
 import java.net.URL;
+import java.sql.ResultSet;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
-import static main.java.Constant.INTERMEDIARY_TYPE;
-import static main.java.Constant.USER_TYPE;
+
+import static main.java.Constant.*;
 
 
-public class LoginController implements Initializable{
-
-    @FXML
-    private Button mLoginButton;
+public class LoginController implements Initializable {
     @FXML
     private TextField mUsernameTextField;
     @FXML
@@ -27,8 +29,6 @@ public class LoginController implements Initializable{
     private RadioButton mIntermediaryRadioButton;
     @FXML
     private Label mResultLabel;
-    @FXML
-    private Label mRegisterLabel;
 
     private ToggleGroup group;
     private int roleType = 0;
@@ -40,7 +40,6 @@ public class LoginController implements Initializable{
         mUserRadioButton.setToggleGroup(group);
         mIntermediaryRadioButton.setToggleGroup(group);
         mUserRadioButton.setSelected(true);
-
     }
 
     public void onLoginButtonClicked(ActionEvent actionEvent) {
@@ -49,15 +48,39 @@ public class LoginController implements Initializable{
         roleType = mUserRadioButton.isSelected() ? USER_TYPE : INTERMEDIARY_TYPE;
         if (username.length() == 0 || password.length() == 0) {
             setResult(true, Constant.IS_EMPTY);
-        } else if (password.length() < 6){
+        } else if (password.length() < 6) {
             setResult(true, Constant.PASSWORDLESSSIX);
         } else {
-            if (roleType == USER_TYPE)
-                MainApp.getApp().toUser();
-            else
-                MainApp.getApp().toIntermediary();
+            String sql = null;
+            List<Object> objects = null;
+            try {
+                if (roleType == USER_TYPE) {
+                    sql = "SELECT * FROM Uuser WHERE Uusername = ? AND Upassword = ?";
+                    objects = Arrays.asList(username, password);
+                    ResultSet resultSet = JDBCHelper.getsInstance().executeQuery(sql, objects);
+                    if (resultSet.next()) {
+                        Constant.ID = resultSet.getInt(1);
+                        Constant.NAME = username;
+                        Constant.ROLE = USER_TYPE;
+                        MainApp.getApp().toUser();
+                    } else
+                        setResult(true, USERNAMEORPASSWORDISERROR);
+                } else {
+                    sql = "SELECT * FROM Intermediary WHERE Iusername = ? AND Ipassword = ?";
+                    objects = Arrays.asList(username, password);
+                    ResultSet resultSet = JDBCHelper.getsInstance().executeQuery(sql, objects);
+                    if (resultSet.next()) {
+                        Constant.ID = resultSet.getInt(1);
+                        Constant.NAME = username;
+                        Constant.ROLE = INTERMEDIARY_TYPE;
+                        MainApp.getApp().toIntermediary();
+                    } else
+                        setResult(true, USERNAMEORPASSWORDISERROR);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     private void setResult(boolean flag, String result) {

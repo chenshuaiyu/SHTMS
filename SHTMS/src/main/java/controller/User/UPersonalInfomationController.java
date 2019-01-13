@@ -1,22 +1,27 @@
 package main.java.controller.User;
 
 import com.jfoenix.controls.JFXTextField;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
-import main.java.bean.User;
+import main.java.Constant;
+import main.java.db.JDBCHelper;
+import main.java.utils.AlertUtil;
 
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
-/**
- * Coder : chenshuaiyu
- * Time : 2019/1/8 22:32
- */
+import static main.java.Constant.AGES;
+import static main.java.Constant.SEXS;
+
+
 public class UPersonalInfomationController implements Initializable {
     @FXML
     private JFXTextField mUsername;
@@ -40,29 +45,85 @@ public class UPersonalInfomationController implements Initializable {
     private Button mEditButton;
     @FXML
     private Button mCompleteButton;
+    @FXML
+    private Button mCancelButton;
 
+    private ResultSet resultSet;
+
+    private String name;
+    private String sex;
+    private int age;
+    private String tel;
+    private String email;
+    private String identityNum;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ObservableList<String> sexs = FXCollections.observableArrayList("男", "女");
-        ObservableList<Integer> ages = FXCollections.observableArrayList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
-
         setEditable(false);
-        User user = new User("昵称", "张三", "141031199601011110", "男", 20, "13546743074", "12345678@qq.com");
-        mUsername.setText(user.getUserName());
-        mName.setText(user.getName());
-        mIdentityNumber.setText(user.getIdentityNumber());
-        mSexChoiceBox.setItems(sexs);
-        mSexTextField.setText("男");
-        mAgeChoiceBox.setItems(ages);
-        mAgeTextField.setText("20");
-        mTel.setText(user.getTel());
-        mEmail.setText(user.getEmail());
+        mSexChoiceBox.setItems(SEXS);
+        mAgeChoiceBox.setItems(AGES);
 
+        String sql = "SELECT * FROM Uuser WHERE Uusername = ? ";
+        List<Object> objects = Arrays.asList(Constant.NAME);
+        resultSet = JDBCHelper.getsInstance().executeQuery(sql, objects);
+        int count = JDBCHelper.getsInstance().getQueryCount(sql, objects);
+        try {
+            resultSet.next();
+            getData(resultSet);
+            setValue();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void mEditButtonClicked(MouseEvent mouseEvent) {
+        setEditable(true);
+    }
+
+    public void mCompleteButtonClicked(MouseEvent mouseEvent) {
+        setEditable(false);
+
+        name = mName.getText();
+        identityNum = mIdentityNumber.getText();
+        sex = Constant.SEXS.get(mSexChoiceBox.getSelectionModel().getSelectedIndex());
+        age = mAgeChoiceBox.getSelectionModel().getSelectedIndex() + 1;
+        tel = mTel.getText();
+        email = mEmail.getText();
+
+        String sql = "UPDATE Uuser SET Uname = ?, Usex = ?, Uage = ?, Utel = ?, Uemail = ?, Uidentity_num = ? WHERE Uusername = ? ";
+        List<Object> objects = Arrays.asList(name, sex, age, tel, email, identityNum, Constant.NAME);
+        int result = JDBCHelper.getsInstance().executeUpdate(sql, objects);
+
+        if (result > 0) {
+            setValue();
+            AlertUtil.alert("修改信息", "修改成功");
+        } else {
+            getData(resultSet);
+            setValue();
+            AlertUtil.alert("修改信息", "修改失败");
+        }
+    }
+
+    public void mCancelButtonClicked(MouseEvent mouseEvent) {
+        setEditable(false);
+        setValue();
+    }
+
+    private void getData(ResultSet resultSet) {
+        try {
+            name = resultSet.getString(3);
+            sex = resultSet.getString(4);
+            age = resultSet.getInt(5);
+            tel = resultSet.getString(6);
+            email = resultSet.getString(7);
+            identityNum = resultSet.getString(8);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setEditable(boolean value) {
-        mUsername.setEditable(value);
+        mUsername.setEditable(false);
         mName.setEditable(value);
         mIdentityNumber.setEditable(value);
         mSexChoiceBox.setVisible(value);
@@ -73,20 +134,21 @@ public class UPersonalInfomationController implements Initializable {
         mAgeTextField.setEditable(value);
         mTel.setEditable(value);
         mEmail.setEditable(value);
+
+        mCompleteButton.setVisible(value);
+        mCancelButton.setVisible(value);
+        mEditButton.setVisible(!value);
     }
 
-
-    public void mEditButtonClicked(MouseEvent mouseEvent) {
-        setEditable(true);
-        mCompleteButton.setVisible(true);
-        mEditButton.setVisible(false);
-        mSexChoiceBox.setValue("男");
-        mAgeChoiceBox.setValue(20);
-    }
-
-    public void mCompleteButtonClicked(MouseEvent mouseEvent) {
-        setEditable(false);
-        mCompleteButton.setVisible(false);
-        mEditButton.setVisible(true);
+    private void setValue() {
+        mUsername.setText(Constant.NAME);
+        mName.setText(name);
+        mIdentityNumber.setText(identityNum);
+        mSexChoiceBox.getSelectionModel().select((sex.equals("男") ? 0 : 1));
+        mSexTextField.setText(sex);
+        mAgeChoiceBox.getSelectionModel().select(age - 1);
+        mAgeTextField.setText(age + "");
+        mTel.setText(tel);
+        mEmail.setText(email);
     }
 }

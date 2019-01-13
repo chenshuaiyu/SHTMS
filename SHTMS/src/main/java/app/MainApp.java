@@ -19,7 +19,7 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         app = this;
         stage = primaryStage;
-        root = FXMLLoader.load(getClass().getResource("../../resourses/fxml/Login.fxml"));
+        root = FXMLLoader.load(getClass().getResource("../../resources/fxml/Login.fxml"));
         primaryStage.setTitle("二手房交易管理系统");
         primaryStage.setScene(new Scene(root, 720, 405));
 //        primaryStage.setResizable(false);
@@ -32,6 +32,10 @@ public class MainApp extends Application {
 
     public static MainApp getApp(){
         return app;
+    }
+
+    public void close(){
+        stage.close();
     }
 
     public void toUser() {

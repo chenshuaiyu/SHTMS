@@ -1,9 +1,6 @@
 package main.java.bean;
 
-/**
- * Coder : chenshuaiyu
- * Time : 2019/1/10 15:23
- */
+
 public class House {
     private int id; // 房源ID
     private String province;
@@ -14,7 +11,7 @@ public class House {
     private int floor;
     private int no; // 门牌号
     private int area;
-    private int price;
+    private float price;
     private int uId; // 户主ID
     private int propertyCost;
     private int isDecorated;
@@ -23,7 +20,13 @@ public class House {
     private int livingRoomNum;
     private int iId; //中介人员
 
-    public House(int id, String province, String city, String county, String communityName, String buildingNo, int floor, int no, int area, int price, int uId, int propertyCost, int isDecorated, int hasGarage, int roomNum, int livingRoomNum, int iId) {
+    public House() {
+    }
+
+    public House(int id, String province, String city, String county, String communityName,
+                 String buildingNo, int floor, int no, int area, float price,
+                 int uId, int propertyCost, int isDecorated, int hasGarage,
+                 int roomNum, int livingRoomNum, int iId) {
         this.id = id;
         this.province = province;
         this.city = city;
@@ -115,11 +118,11 @@ public class House {
         this.area = area;
     }
 
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
