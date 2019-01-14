@@ -20,6 +20,7 @@ import main.java.bean.House;
 import main.java.controller.UpdateHouseController;
 import main.java.db.JDBCHelper;
 import main.java.listener.ListViewListener;
+import main.java.utils.AlertUtil;
 import main.java.utils.ListViewHelper;
 import sun.net.www.content.audio.x_aiff;
 
@@ -51,6 +52,12 @@ public class UMyFavoriteHousesController implements Initializable {
     private Button mPayDepositButton;
     @FXML
     private Button mCompleteButton;
+    @FXML
+    private Label mLookHouseLabel;
+    @FXML
+    private Label mPayDepositLabel;
+    @FXML
+    private Label mCompleteLabel;
 
     private ListViewHelper listViewHelper;
 
@@ -63,25 +70,25 @@ public class UMyFavoriteHousesController implements Initializable {
         mCompleteButton.setDisable(true);
 
         listViewHelper = new ListViewHelper(mListView);
-        listViewHelper.setListener("SELECT * FROM House,Reservationhouse WHERE Reservationhouse.Uuid = ? AND House.Hid = Reservationhouse.Hid;", Arrays.asList(Constant.ID), new ListViewListener() {
+        listViewHelper.setListener("SELECT * FROM House, Reservationhouse WHERE Reservationhouse.Uuid = ? AND House.Hid = Reservationhouse.Hid;", Arrays.asList(Constant.ID), new ListViewListener() {
             @Override
             public void todo(House item) {
                 house = item;
-                List<Object> rObjects = Arrays.asList(item.getId(), Constant.ID);
-                ResultSet rResultSet = JDBCHelper.getsInstance().executeQuery("SELECT * FROM House, Reservationhouse WHERE Reservationhouse.Hid = ? AND Reservationhouse.Hid = House.Hid AND House.Iid = ?;", rObjects);
-                List<Object> pObjects = Arrays.asList(item.getId(), Constant.ID);
-                ResultSet pResultSet = JDBCHelper.getsInstance().executeQuery("SELECT * FROM House, Paydeposit WHERE Paydeposit.Hid = ? AND Paydeposit.Hid = House.Hid AND House.Iid = ?;", pObjects);
-                List<Object> cObjects = Arrays.asList(item.getId(), Constant.ID);
-                ResultSet cResultSet = JDBCHelper.getsInstance().executeQuery("SELECT * FROM House, Completetransaction WHERE Completetransaction.Hid = ? AND Completetransaction.Hid = House.Hid AND House.Iid = ?;", cObjects);
+                List<Object> rObjects = Arrays.asList(Constant.ID, item.getId());
+                ResultSet rResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Ragree FROM House, Reservationhouse WHERE Reservationhouse.Uuid = ? AND Reservationhouse.Hid = ?;", rObjects);
+                List<Object> pObjects = Arrays.asList(Constant.ID, item.getId());
+                ResultSet pResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Pagree FROM House, Paydeposit WHERE Paydeposit.Uuid = ? AND Paydeposit.Hid = ?;", pObjects);
+                List<Object> cObjects = Arrays.asList(Constant.ID, item.getId());
+                ResultSet cResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Cagree FROM House, Completetransaction WHERE Completetransaction.Uuid = ? AND Completetransaction.Hid = ?;", cObjects);
 
                 int rAgree = -1, pAgree = -1, cAgree = -1;
                 try {
-                    if (rResultSet.next())
-                        rAgree = rResultSet.getInt(5);
-                    if (pResultSet.next())
-                        pAgree = rResultSet.getInt(7);
-                    if (rResultSet.next())
-                        cAgree = cResultSet.getInt(8);
+                    if (rResultSet != null && rResultSet.next())
+                        rAgree = rResultSet.getInt(1);
+                    if (pResultSet != null && pResultSet.next())
+                        pAgree = pResultSet.getInt(1);
+                    if (cResultSet != null && cResultSet.next())
+                        cAgree = cResultSet.getInt(1);
 
                     System.out.println(rAgree);
                     System.out.println(pAgree);
@@ -103,59 +110,99 @@ public class UMyFavoriteHousesController implements Initializable {
     }
 
     public void mPayDepositButtonClicked(MouseEvent mouseEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("预约信息");
-        alert.setHeaderText(null);
-        alert.setContentText("已预约付定金");
-        alert.showAndWait();
+        String sql = "INSERT INTO Paydeposit(Uuid, Hid, Pmoney, Pliquidated_money, Pagree) VALUES(?, ?, ?, ?, ?)";
+        List<Object> params = Arrays.asList(Constant.ID, house.getId(), 10000, 1000, 0);
+        int result = JDBCHelper.getsInstance().executeUpdate(sql, params);
+        if (result > 0) {
+            mPayDepositButton.setDisable(true);
+            AlertUtil.alert("预约信息", "预约付定金成功");
+            mPayDepositLabel.setVisible(true);
+        } else {
+            AlertUtil.alert("预约信息", "预约付定金失败");
+        }
     }
 
     public void mCompleteButtonClicked(MouseEvent mouseEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("预约信息");
-        alert.setHeaderText(null);
-        alert.setContentText("已预约付全款");
-        alert.showAndWait();
+        String sql = "INSERT INTO Completetransaction(Uuid, Hid, Csum_money, Cagree, Cintermediary_cost, Ctype) VALUES(?, ?, ?, ?, ?, ?)";
+        List<Object> params = Arrays.asList(Constant.ID, house.getId(), 10, 0, 1000, 1);
+        int result = JDBCHelper.getsInstance().executeUpdate(sql, params);
+        if (result > 0) {
+            mCompleteButton.setDisable(true);
+            AlertUtil.alert("预约信息", "预约交付全款成功");
+            mCompleteLabel.setVisible(true);
+        } else {
+            AlertUtil.alert("预约信息", "预约交付全款失败");
+        }
+    }
+
+    public void mIntermediaryClicked(MouseEvent mouseEvent) {
+        ResultSet resultSet = null;
+        try {
+            resultSet = JDBCHelper.getsInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
+            if (resultSet.next()) {
+                AlertUtil.alert("中介人员信息", "姓名：" + resultSet.getString(1) +
+                        "\n\n性别：" + resultSet.getString(2) +
+                        "\n\n联系方式：" + resultSet.getString(3) +
+                        "\n\nEmail：" + resultSet.getString(4));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setFlag(int rAgree, int pAgree, int cAgree) {
         if (rAgree == 1) {
             image1.setImage(new Image(Constant.DO1));
             mLookHouseButton.setDisable(true);
+            mLookHouseLabel.setVisible(false);
         } else if (rAgree == 0) {
             image1.setImage(new Image(Constant.UNDO1));
             mLookHouseButton.setDisable(true);
+            mLookHouseLabel.setVisible(true);
         } else {
             image1.setImage(new Image(Constant.UNDO1));
             mLookHouseButton.setDisable(false);
+            mLookHouseLabel.setVisible(false);
         }
 
         if (pAgree == 1) {
             image2.setImage(new Image(Constant.DO2));
             image3.setImage(new Image(Constant.DO1));
             mPayDepositButton.setDisable(true);
+            mPayDepositLabel.setVisible(false);
         } else if (pAgree == 0) {
             image2.setImage(new Image(Constant.UNDO2));
             image3.setImage(new Image(Constant.UNDO1));
             mPayDepositButton.setDisable(true);
+            mPayDepositLabel.setVisible(true);
         } else {
             image2.setImage(new Image(Constant.UNDO2));
             image3.setImage(new Image(Constant.UNDO1));
-            mPayDepositButton.setDisable(false);
+            if (rAgree == 1)
+                mPayDepositButton.setDisable(false);
+            else
+                mPayDepositButton.setDisable(true);
+            mPayDepositLabel.setVisible(false);
         }
 
         if (cAgree == 1) {
             image4.setImage(new Image(Constant.DO2));
             image5.setImage(new Image(Constant.DO1));
             mCompleteButton.setDisable(true);
+            mCompleteLabel.setVisible(false);
         } else if (cAgree == 0) {
             image4.setImage(new Image(Constant.UNDO2));
             image5.setImage(new Image(Constant.UNDO1));
             mCompleteButton.setDisable(true);
+            mCompleteLabel.setVisible(true);
         } else {
             image4.setImage(new Image(Constant.UNDO2));
             image5.setImage(new Image(Constant.UNDO1));
-            mCompleteButton.setDisable(false);
+            if (pAgree == 1)
+                mCompleteButton.setDisable(false);
+            else
+                mCompleteButton.setDisable(true);
+            mCompleteLabel.setVisible(false);
         }
     }
 

@@ -11,6 +11,7 @@ import main.java.Constant;
 import main.java.listener.ListViewListener;
 import main.java.bean.House;
 import main.java.db.JDBCHelper;
+import main.java.utils.AlertUtil;
 import main.java.utils.ListViewHelper;
 
 import java.net.URL;
@@ -35,6 +36,7 @@ public class UHouseSellProgressController implements Initializable {
 
     private ObservableList<House> list = null;
     private ListViewHelper listViewHelper = null;
+    private House house;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -46,21 +48,22 @@ public class UHouseSellProgressController implements Initializable {
         listViewHelper.setListener("SELECT * FROM House WHERE Uuid = ?", Arrays.asList(Constant.ID), new ListViewListener() {
             @Override
             public void todo(House item) {
-                List<Object> rObjects = Arrays.asList(Constant.ID);
-                ResultSet rResultSet = JDBCHelper.getsInstance().executeQuery("SELECT * FROM House, Reservationhouse WHERE House.Uuid = ? AND Reservationhouse.Hid = House.Hid;", rObjects);
-                List<Object> pObjects = Arrays.asList(Constant.ID);
-                ResultSet pResultSet = JDBCHelper.getsInstance().executeQuery("SELECT * FROM House, Paydeposit WHERE House.Uuid = ? AND Paydeposit.Hid = House.Hid ;", pObjects);
-                List<Object> cObjects = Arrays.asList(Constant.ID);
-                ResultSet cResultSet = JDBCHelper.getsInstance().executeQuery("SELECT * FROM House, Completetransaction WHERE Completetransaction.Uuid = ? AND Completetransaction.Hid = House.Hid;", cObjects);
+                house = item;
+                List<Object> rObjects = Arrays.asList(Constant.ID, house.getId());
+                ResultSet rResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Ragree FROM House, Reservationhouse WHERE House.Uuid = ? AND Reservationhouse.Hid = ? AND Reservationhouse.Hid = House.Hid;", rObjects);
+                List<Object> pObjects = Arrays.asList(Constant.ID, house.getId());
+                ResultSet pResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Pagree FROM House, Paydeposit WHERE House.Uuid = ? AND Paydeposit.Hid = ? AND Paydeposit.Hid = House.Hid ;", pObjects);
+                List<Object> cObjects = Arrays.asList(Constant.ID, house.getId());
+                ResultSet cResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Cagree FROM House, Completetransaction WHERE House.Uuid = ? AND Completetransaction.Hid = ? AND Completetransaction.Hid = House.Hid;", cObjects);
 
                 int rAgree = -1, pAgree = -1, cAgree = -1;
                 try {
-                    if (rResultSet.next())
-                        rAgree = rResultSet.getInt(5);
-                    if (pResultSet.next())
-                        pAgree = rResultSet.getInt(7);
-                    if (rResultSet.next())
-                        cAgree = cResultSet.getInt(8);
+                    if (rResultSet != null && rResultSet.next())
+                        rAgree = rResultSet.getInt(1);
+                    if (pResultSet != null && pResultSet.next())
+                        pAgree = pResultSet.getInt(1);
+                    if (cResultSet != null && cResultSet.next())
+                        cAgree = cResultSet.getInt(1);
 
                     System.out.println(rAgree);
                     System.out.println(pAgree);
@@ -73,6 +76,21 @@ public class UHouseSellProgressController implements Initializable {
 
             }
         });
+    }
+
+    public void mIntermediaryClicked(MouseEvent mouseEvent) {
+        ResultSet resultSet = null;
+        try {
+            resultSet = JDBCHelper.getsInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
+            if (resultSet.next()) {
+                AlertUtil.alert("中介人员信息", "姓名：" + resultSet.getString(1) +
+                        "\n\n性别：" + resultSet.getString(2) +
+                        "\n\n联系方式：" + resultSet.getString(3) +
+                        "\n\nEmail：" + resultSet.getString(4));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setFlag(int rAgree, int pAgree, int cAgree) {

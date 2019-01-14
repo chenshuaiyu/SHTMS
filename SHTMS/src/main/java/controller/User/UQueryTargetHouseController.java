@@ -37,15 +37,14 @@ public class UQueryTargetHouseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listViewHelper = new ListViewHelper(mListView);
-        setHouse();
+        setHouse("SELECT * FROM House WHERE Uuid <> ?", Arrays.asList(Constant.ID));
 
     }
 
-    private void setHouse() {
-        listViewHelper.setListener("SELECT * FROM House WHERE Uuid <> ?", Arrays.asList(Constant.ID), new ListViewListener() {
+    private void setHouse(String sql, List<Object> params) {
+        listViewHelper.setListener(sql, params, new ListViewListener() {
             @Override
             public void todo(House item) {
-                System.out.println(item.getId());
                 try {
                     Stage stage = new Stage();
                     stage.setAlwaysOnTop(true);
@@ -120,7 +119,12 @@ public class UQueryTargetHouseController implements Initializable {
 
             controller.setQueryHouseListener(new QueryHouseListener() {
                 @Override
-                public void query(House h) {
+                public void query(String sql, List<Object> params) {
+
+//                    setHouse(sql, params);
+
+
+
 
                     stage.close();
                 }

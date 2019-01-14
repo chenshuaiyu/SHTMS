@@ -26,7 +26,6 @@ public class ListViewHelper {
     private ListViewListener listener;
     private ObservableList<House> list;
 
-
     public ListViewHelper(ListView listView) {
         this.listView = listView;
 
@@ -34,7 +33,6 @@ public class ListViewHelper {
 
     public void setListener(String sql, List<Object> params, ListViewListener listener) {
         this.listener = listener;
-//        List<Object> objects = Arrays.asList(Constant.ID);
         ResultSet resultSet = null;
         try {
             List<House> l = new ArrayList<>();
@@ -87,8 +85,5 @@ public class ListViewHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
     }
 }

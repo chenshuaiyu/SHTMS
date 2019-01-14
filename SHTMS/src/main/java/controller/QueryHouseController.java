@@ -2,14 +2,24 @@ package main.java.controller;
 
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
+import main.java.Constant;
+import main.java.db.JDBCHelper;
 import main.java.listener.QueryHouseListener;
 import main.java.bean.House;
 
+import java.net.URL;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class QueryHouseController {
+
+public class QueryHouseController implements Initializable {
     @FXML
     public JFXTextField mProvinceTextField;
     @FXML
@@ -21,9 +31,9 @@ public class QueryHouseController {
     @FXML
     public JFXTextField mFloorTextField;
     @FXML
-    public ChoiceBox mAreaTextField;
+    public ChoiceBox mAreaChoiceBox;
     @FXML
-    public ChoiceBox mPriceTextField;
+    public ChoiceBox mPriceChoiceBox;
     @FXML
     public JFXTextField mRoomTextField;
     @FXML
@@ -39,19 +49,28 @@ public class QueryHouseController {
         listener = l;
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        mAreaChoiceBox.setItems(Constant.AREA);
+        mPriceChoiceBox.setItems(Constant.PRICE);
+
+    }
+
     public void mQueryButtonClicked(MouseEvent mouseEvent) {
         String province = mProvinceTextField.getText();
         String city = mCityTextField.getText();
         String county = mCountyTextField.getText();
         String community = mCommunityTextField.getText();
         String floor = mFloorTextField.getText();
-//        mAreaTextField;
-//        mPriceTextField;
+        int area = mAreaChoiceBox.getSelectionModel().getSelectedIndex();
+        int price = mPriceChoiceBox.getSelectionModel().getSelectedIndex();
         String romm = mRoomTextField.getText();
         String livingRoom = mLivingRoomTextField.getText();
 
-        listener.query(new House());
+        String sql = "";
+        List<Object> objects = Arrays.asList();
 
+        listener.query(sql, objects);
     }
 
     public void mCancelButtonClicked(MouseEvent mouseEvent) {

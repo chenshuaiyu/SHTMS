@@ -31,7 +31,7 @@
                     </image>
                 </ImageView>
                 <Hyperlink alignment="CENTER" layoutX="41.0" layoutY="86.0" prefHeight="26.0" prefWidth="70.0"
-                           text="中介人员">
+                           text="中介人员" onMouseClicked="#mIntermediaryClicked">
                     <font>
                         <Font size="13.0"/>
                     </font>

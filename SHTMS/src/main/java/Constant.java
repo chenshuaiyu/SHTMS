@@ -63,6 +63,7 @@ public class Constant {
     public static final String UNDO2 = "file:E:\\\\Java\\\\IntelliJ IDEA\\\\IJ\\\\SHTMSDemo\\\\src\\\\main\\\\resources\\\\assets\\\\undo2.jpg";
 
 
+    //ChoiceBox的Item列表
     public static final ObservableList<String> SEXS = FXCollections.observableArrayList("男", "女");
     public static final ObservableList<Integer> AGES = FXCollections.observableArrayList(
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
@@ -77,6 +78,10 @@ public class Constant {
             91, 92, 93, 94, 95, 96, 97, 98, 99, 100);
     public static final ObservableList<String> ISDECORATED = FXCollections.observableArrayList("是", "否");
     public static final ObservableList<String> HASGARAGE = FXCollections.observableArrayList("有", "无");
+    public static final ObservableList<String> PRICE = FXCollections.observableArrayList("低于50万", "50-100万","高于100万");
+    public static final ObservableList<String> AREA = FXCollections.observableArrayList("小于100㎡", "100-150㎡","大于150㎡");
+
+
 
 
 

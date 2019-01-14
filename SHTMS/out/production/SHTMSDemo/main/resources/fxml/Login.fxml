@@ -24,7 +24,7 @@
                     <font>
                         <Font name="Algerian" size="24.0" />
                     </font></Label>
-                <Button fx:id="mLoginButton" layoutX="24.0" layoutY="316.0" onAction="#onLoginButtonClicked" prefHeight="32.0" prefWidth="165.0" text="登录" />
+                <Button fx:id="mLoginButton" layoutX="24.0" layoutY="316.0" onAction="#onLoginButtonClicked" prefHeight="32.0" prefWidth="165.0" text="登     录" />
                 <TextField fx:id="mUsernameTextField" layoutX="32.0" layoutY="171.0" prefHeight="23.0" prefWidth="149.0" promptText="用 户 名" />
                 <PasswordField fx:id="mPasswordField" layoutX="33.0" layoutY="212.0" prefHeight="23.0" prefWidth="149.0" promptText="密    码" />
                 <RadioButton fx:id="mUserRadioButton" layoutX="26.0" layoutY="257.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="73.0" text="普通用户" />

@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
 import main.java.Constant;
-import main.java.bean.User;
 import main.java.db.JDBCHelper;
 import main.java.utils.AlertUtil;
 
