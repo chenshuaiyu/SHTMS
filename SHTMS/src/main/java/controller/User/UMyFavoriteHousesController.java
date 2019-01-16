@@ -111,32 +111,27 @@ public class UMyFavoriteHousesController implements Initializable {
                     System.out.println(cAgree);
 
                     setFlag(rAgree, pAgree, cAgree);
+
+                    ResultSet resultSet = JDBCHelper.getInstance().executeQuery("SELECT Hstatus FROM House WHERE Hid = ?", Arrays.asList(house.getId()));
+                    resultSet.next();
+                    int status = resultSet.getInt(1);
+                    if (status == 1) {
+                        mLookHouseButton.setDisable(true);
+                        mPayDepositButton.setDisable(true);
+                        mCompleteButton.setDisable(true);
+                        mStatusLabel.setText(Constant.SOLD);
+                        mLookHouseLabel.setVisible(false);
+                        mPayDepositLabel.setVisible(false);
+                        mCompleteLabel.setVisible(false);
+                    } else {
+                        mStatusLabel.setText(Constant.UNSOLD);
+                    }
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         });
-
-        //判断房源状态
-        ResultSet resultSet = null;
-        try {
-            resultSet = JDBCHelper.getInstance().executeQuery("SELECT Hstatus FROM House WHERE Hid = ?", Arrays.asList(house.getId()));
-            resultSet.next();
-            int status = resultSet.getInt(1);
-            if (status == 1) {
-                mLookHouseButton.setDisable(true);
-                mPayDepositButton.setDisable(true);
-                mCompleteButton.setDisable(true);
-                mStatusLabel.setText(Constant.SOLD);
-                mLookHouseLabel.setVisible(false);
-                mPayDepositLabel.setVisible(false);
-                mCompleteLabel.setVisible(false);
-            } else {
-                mStatusLabel.setText(Constant.UNSOLD);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
     }
 
