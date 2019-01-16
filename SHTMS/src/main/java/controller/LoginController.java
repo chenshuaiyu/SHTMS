@@ -8,13 +8,11 @@ import javafx.scene.input.MouseEvent;
 import main.java.Constant;
 import main.java.app.MainApp;
 import main.java.db.JDBCHelper;
-
 import java.net.URL;
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import static main.java.Constant.*;
 
 

@@ -8,50 +8,42 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="665.0" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.User.UHouseSellProgressController">
+<AnchorPane prefHeight="500.0" prefWidth="665.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.User.UHouseSellProgressController">
     <children>
-        <AnchorPane layoutX="30.0" layoutY="15.0" prefHeight="30.0" prefWidth="610.0"
-                    style="-fx-background-color: #d6d6d6;"/>
-        <ListView fx:id="mListView" layoutX="30.0" layoutY="44.0" prefHeight="235.0" prefWidth="610.0"/>
-        <Label layoutX="42.0" layoutY="15.0" prefHeight="30.0" text="地区"/>
-        <Label layoutX="173.0" layoutY="15.0" prefHeight="30.0" text="小区"/>
-        <Label layoutX="265.0" layoutY="15.0" prefHeight="30.0" text="位置"/>
-        <Label layoutX="395.0" layoutY="15.0" prefHeight="30.0" text="面积"/>
-        <Label layoutX="470.0" layoutY="15.0" prefHeight="30.0" text="价格"/>
-        <Label layoutX="540.0" layoutY="15.0" prefHeight="30.0" text="室"/>
-        <Label layoutX="590.0" layoutY="15.0" prefHeight="30.0" text="厅"/>
-        <AnchorPane layoutX="30.0" layoutY="288.0" prefHeight="194.0" prefWidth="610.0"
-                    style="-fx-background-color: #ffffff;">
+        <AnchorPane layoutX="30.0" layoutY="15.0" prefHeight="30.0" prefWidth="610.0" style="-fx-background-color: #d6d6d6;" />
+        <ListView fx:id="mListView" layoutX="30.0" layoutY="44.0" prefHeight="235.0" prefWidth="610.0" />
+        <Label layoutX="42.0" layoutY="15.0" prefHeight="30.0" text="地区" />
+        <Label layoutX="173.0" layoutY="15.0" prefHeight="30.0" text="小区" />
+        <Label layoutX="265.0" layoutY="15.0" prefHeight="30.0" text="位置" />
+        <Label layoutX="395.0" layoutY="15.0" prefHeight="30.0" text="面积" />
+        <Label layoutX="470.0" layoutY="15.0" prefHeight="30.0" text="价格" />
+        <Label layoutX="540.0" layoutY="15.0" prefHeight="30.0" text="室" />
+        <Label layoutX="590.0" layoutY="15.0" prefHeight="30.0" text="厅" />
+        <AnchorPane layoutX="30.0" layoutY="288.0" prefHeight="194.0" prefWidth="610.0" style="-fx-background-color: #ffffff;">
             <children>
-                <ImageView fx:id="image1" fitHeight="70.0" fitWidth="70.0" layoutX="206.0" layoutY="65.0"
-                           pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="image1" fitHeight="70.0" fitWidth="70.0" layoutX="206.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../../assets/undo1.jpg"/>
+                        <Image url="@../../assets/undo1.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="image5" fitHeight="70.0" fitWidth="70.0" layoutX="462.0" layoutY="67.0"
-                           pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="image5" fitHeight="70.0" fitWidth="70.0" layoutX="462.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../../assets/undo1.jpg"/>
+                        <Image url="@../../assets/undo1.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="image3" fitHeight="70.0" fitWidth="70.0" layoutX="335.0" layoutY="67.0"
-                           pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="image3" fitHeight="70.0" fitWidth="70.0" layoutX="335.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../../assets/undo1.jpg"/>
+                        <Image url="@../../assets/undo1.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="image2" fitHeight="11.0" fitWidth="70.0" layoutX="269.0" layoutY="94.0"
-                           pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="image2" fitHeight="11.0" fitWidth="70.0" layoutX="269.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../../assets/undo2.jpg"/>
+                        <Image url="@../../assets/undo2.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="image4" fitHeight="11.0" fitWidth="70.0" layoutX="399.0" layoutY="94.0"
-                           pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="image4" fitHeight="11.0" fitWidth="70.0" layoutX="399.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../../assets/undo2.jpg"/>
+                        <Image url="@../../assets/undo2.jpg" />
                     </image>
                 </ImageView>
                 <ImageView fitHeight="70.0" fitWidth="70.0" layoutX="41.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
@@ -93,19 +85,21 @@
 
                 <Label layoutX="220.0" layoutY="138.0" text="已看房">
                     <font>
-                        <Font size="14.0"/>
+                        <Font size="14.0" />
                     </font>
                 </Label>
                 <Label layoutX="342.0" layoutY="138.0" text="已付定金">
                     <font>
-                        <Font size="14.0"/>
+                        <Font size="14.0" />
                     </font>
                 </Label>
                 <Label layoutX="469.0" layoutY="138.0" text="完成交易">
                     <font>
-                        <Font size="14.0"/>
+                        <Font size="14.0" />
                     </font>
                 </Label>
+            <Label layoutX="427.0" layoutY="166.0" text="完成交易时间：" />
+            <Label fx:id="mDateLabel" layoutX="514.0" layoutY="166.0" prefHeight="15.0" prefWidth="84.0" text="未知" />
             </children>
         </AnchorPane>
     </children>

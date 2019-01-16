@@ -9,12 +9,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.java.Constant;
-import main.java.bean.House;
+import main.java.bean.HouseRecord;
 import main.java.db.JDBCHelper;
-import main.java.listener.ListViewListener;
+import main.java.listener.ListViewListenerForIntermediary;
 import main.java.utils.AlertUtil;
-import main.java.utils.ListViewHelper;
-
+import main.java.utils.DateUtil;
+import main.java.utils.ListViewHelperForIntermediary;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,41 +45,44 @@ public class IManagerTransactionInformationController implements Initializable {
     private Label mLiquidatedLabel;
     @FXML
     private Label mTypeLabel;
+    @FXML
+    private Label mDateLabel;
 
-    private ListViewHelper listViewHelper;
-    private House house;
-
+    private ListViewHelperForIntermediary listViewHelperForIntermediary;
+    private HouseRecord record;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        listViewHelper = new ListViewHelper(mListView);
+        listViewHelperForIntermediary = new ListViewHelperForIntermediary(mListView);
         setHouse();
     }
 
     private void setHouse() {
-        listViewHelper.setListener("SELECT * FROM House", Arrays.asList(), new ListViewListener() {
+        listViewHelperForIntermediary.setListener("SELECT * FROM House, Completetransaction WHERE House.Hid = Completetransaction.Hid AND Completetransaction.Cagree = 1;", Arrays.asList(), new ListViewListenerForIntermediary() {
             @Override
-            public void todo(House item) {
-                house = item;
-                List<Object> objects = Arrays.asList(item.getId());
-                ResultSet rResultSet = JDBCHelper.getInstance().executeQuery("SELECT Ragree FROM Reservationhouse WHERE Reservationhouse.Hid = ?;", objects);
-                ResultSet pResultSet = JDBCHelper.getInstance().executeQuery("SELECT Pagree, Pmoney, Pliquidated_money FROM Paydeposit WHERE Paydeposit.Hid = ?;", objects);
-                ResultSet cResultSet = JDBCHelper.getInstance().executeQuery("SELECT Cagree, Csum_money, Cintermediary_cost, Ctype FROM Completetransaction WHERE Completetransaction.Hid = ?;", objects);
+            public void todo(HouseRecord item) {
+                record = item;
+
+                List<Object> objects = Arrays.asList(record.getId(), record.getBuyerId());
+                ResultSet rResultSet = JDBCHelper.getInstance().executeQuery("SELECT Ragree FROM Reservationhouse WHERE Reservationhouse.Hid = ? AND Reservationhouse.Uuid = ?;", objects);
+                ResultSet pResultSet = JDBCHelper.getInstance().executeQuery("SELECT Pagree, Pmoney, Pliquidated_money FROM Paydeposit WHERE Paydeposit.Hid = ? AND Paydeposit.Uuid = ?;", objects);
+                ResultSet cResultSet = JDBCHelper.getInstance().executeQuery("SELECT Cagree, Csum_money, Cintermediary_cost, Ctype, Cdate FROM Completetransaction WHERE Completetransaction.Hid = ? AND Completetransaction.Uuid = ?;", objects);
 
                 int rAgree = -1, pAgree = -1, cAgree = -1;
                 try {
                     if (rResultSet != null && rResultSet.next())
                         rAgree = rResultSet.getInt(1);
-                    if (pResultSet != null && pResultSet.next()){
+                    if (pResultSet != null && pResultSet.next()) {
                         pAgree = pResultSet.getInt(1);
                         mMoneyLabel.setText(pResultSet.getInt(2) + "");
                         mLiquidatedLabel.setText(pResultSet.getInt(3) + "");
                     }
-                    if (cResultSet != null && cResultSet.next()){
+                    if (cResultSet != null && cResultSet.next()) {
                         cAgree = cResultSet.getInt(1);
                         mSunMoneyLabel.setText(cResultSet.getFloat(2) + "");
                         mIntermediaryCostLabel.setText(cResultSet.getInt(3) + "");
                         mTypeLabel.setText(Constant.INTERMEDIARYCOSTTYPE.get(cResultSet.getInt(4)));
+                        mDateLabel.setText(DateUtil.transform(cResultSet.getDate(5)));
                     }
 
                     System.out.println(rAgree);
@@ -92,22 +95,24 @@ public class IManagerTransactionInformationController implements Initializable {
                 }
             }
         });
-
     }
 
-    public void mIntermediaryClicked(MouseEvent mouseEvent) {
-        ResultSet resultSet = null;
-        try {
-            resultSet = JDBCHelper.getInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
-            if (resultSet.next()) {
-                AlertUtil.alert("中介人员信息", "姓名：" + resultSet.getString(1) +
-                        "\n\n性别：" + resultSet.getString(2) +
-                        "\n\n联系方式：" + resultSet.getString(3) +
-                        "\n\nEmail：" + resultSet.getString(4));
+    public void mBuyerClicked(MouseEvent mouseEvent) {
+        if (record != null) {
+            ResultSet resultSet = null;
+            try {
+                resultSet = JDBCHelper.getInstance().executeQuery("SELECT Uname, Usex, Utel, Uemail FROM Uuser WHERE Uuid = ?;", Arrays.asList(record.getBuyerId()));
+                if (resultSet.next()) {
+                    AlertUtil.alert("买方信息", "姓名：" + resultSet.getString(1) +
+                            "\n\n性别：" + resultSet.getString(2) +
+                            "\n\n联系方式：" + resultSet.getString(3) +
+                            "\n\nEmail：" + resultSet.getString(4));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+
     }
 
     private void setFlag(int rAgree, int pAgree, int cAgree) {

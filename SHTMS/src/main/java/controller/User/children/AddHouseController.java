@@ -1,8 +1,6 @@
 package main.java.controller.User.children;
 
 import com.jfoenix.controls.JFXTextField;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,7 +9,6 @@ import javafx.scene.input.MouseEvent;
 import main.java.listener.AddHouseListener;
 import main.java.Constant;
 import main.java.bean.House;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 

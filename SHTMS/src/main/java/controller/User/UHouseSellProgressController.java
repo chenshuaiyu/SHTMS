@@ -9,12 +9,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.java.Constant;
-import main.java.listener.ListViewListener;
+import main.java.listener.ListViewListenerForUser;
 import main.java.bean.House;
 import main.java.db.JDBCHelper;
 import main.java.utils.AlertUtil;
-import main.java.utils.ListViewHelper;
-
+import main.java.utils.DateUtil;
+import main.java.utils.ListViewHelperForUser;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,19 +44,21 @@ public class UHouseSellProgressController implements Initializable {
     private Label mLiquidatedLabel;
     @FXML
     private Label mTypeLabel;
+    @FXML
+    private Label mDateLabel;
 
     private ObservableList<House> list = null;
-    private ListViewHelper listViewHelper = null;
+    private ListViewHelperForUser listViewHelperForUser = null;
     private House house;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        listViewHelper = new ListViewHelper(mListView);
+        listViewHelperForUser = new ListViewHelperForUser(mListView);
         setHouse();
     }
 
     private void setHouse() {
-        listViewHelper.setListener("SELECT * FROM House WHERE Uuid = ?", Arrays.asList(Constant.ID), new ListViewListener() {
+        listViewHelperForUser.setListener("SELECT * FROM House WHERE Uuid = ?", Arrays.asList(Constant.ID), new ListViewListenerForUser() {
             @Override
             public void todo(House item) {
                 house = item;
@@ -65,7 +67,7 @@ public class UHouseSellProgressController implements Initializable {
                 List<Object> objects = Arrays.asList(Constant.ID, house.getId());
                 ResultSet rResultSet = JDBCHelper.getInstance().executeQuery("SELECT Ragree FROM House, Reservationhouse WHERE House.Uuid = ? AND Reservationhouse.Hid = ? AND Reservationhouse.Hid = House.Hid;", objects);
                 ResultSet pResultSet = JDBCHelper.getInstance().executeQuery("SELECT Pagree, Pmoney, Pliquidated_money FROM House, Paydeposit WHERE House.Uuid = ? AND Paydeposit.Hid = ? AND Paydeposit.Hid = House.Hid ;", objects);
-                ResultSet cResultSet = JDBCHelper.getInstance().executeQuery("SELECT Cagree, Csum_money, Cintermediary_cost, Ctype FROM House, Completetransaction WHERE House.Uuid = ? AND Completetransaction.Hid = ? AND Completetransaction.Hid = House.Hid;", objects);
+                ResultSet cResultSet = JDBCHelper.getInstance().executeQuery("SELECT Cagree, Csum_money, Cintermediary_cost, Ctype, Cdate FROM House, Completetransaction WHERE House.Uuid = ? AND Completetransaction.Hid = ? AND Completetransaction.Hid = House.Hid;", objects);
 
                 int rAgree = -1, pAgree = -1, cAgree = -1;
                 try {
@@ -81,6 +83,7 @@ public class UHouseSellProgressController implements Initializable {
                         mSunMoneyLabel.setText(cResultSet.getFloat(2) + "");
                         mIntermediaryCostLabel.setText(cResultSet.getInt(3) + "");
                         mTypeLabel.setText(Constant.INTERMEDIARYCOSTTYPE.get(cResultSet.getInt(4)));
+                        mDateLabel.setText(DateUtil.transform(cResultSet.getDate(5)));
                     }
 
                     System.out.println(rAgree);
@@ -91,7 +94,6 @@ public class UHouseSellProgressController implements Initializable {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-
             }
         });
     }
@@ -99,17 +101,19 @@ public class UHouseSellProgressController implements Initializable {
 
 
     public void mIntermediaryClicked(MouseEvent mouseEvent) {
-        ResultSet resultSet = null;
-        try {
-            resultSet = JDBCHelper.getInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
-            if (resultSet.next()) {
-                AlertUtil.alert("中介人员信息", "姓名：" + resultSet.getString(1) +
-                        "\n\n性别：" + resultSet.getString(2) +
-                        "\n\n联系方式：" + resultSet.getString(3) +
-                        "\n\nEmail：" + resultSet.getString(4));
+        if (house != null) {
+            ResultSet resultSet = null;
+            try {
+                resultSet = JDBCHelper.getInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid is not null AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
+                if (resultSet.next()) {
+                    AlertUtil.alert("中介人员信息", "姓名：" + resultSet.getString(1) +
+                            "\n\n性别：" + resultSet.getString(2) +
+                            "\n\n联系方式：" + resultSet.getString(3) +
+                            "\n\nEmail：" + resultSet.getString(4));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
@@ -119,6 +123,7 @@ public class UHouseSellProgressController implements Initializable {
         mIntermediaryCostLabel.setText(Constant.UNKNOWN);
         mLiquidatedLabel.setText(Constant.UNKNOWN);
         mTypeLabel.setText(Constant.UNKNOWN);
+        mDateLabel.setText(Constant.UNKNOWN);
     }
 
     public void setFlag(int rAgree, int pAgree, int cAgree) {

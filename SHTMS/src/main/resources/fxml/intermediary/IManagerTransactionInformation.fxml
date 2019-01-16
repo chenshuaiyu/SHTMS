@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="main.java.controller.intermediary.IManagerTransactionInformationController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="main.java.controller.intermediary.IManagerTransactionInformationController">
     <children>
         <AnchorPane layoutX="30.0" layoutY="15.0" prefHeight="30.0" prefWidth="610.0"
                     style="-fx-background-color: #d6d6d6;"/>
@@ -32,8 +31,8 @@
                         <Image url="@../../assets/icon.png"/>
                     </image>
                 </ImageView>
-                <Hyperlink alignment="CENTER" layoutX="41.0" layoutY="81.0" onMouseClicked="#mIntermediaryClicked"
-                           prefHeight="26.0" prefWidth="70.0" text="中介人员">
+                <Hyperlink alignment="CENTER" layoutX="41.0" layoutY="81.0" onMouseClicked="#mBuyerClicked"
+                           prefHeight="26.0" prefWidth="70.0" text="买方">
                     <font>
                         <Font size="13.0"/>
                     </font>
@@ -127,6 +126,8 @@
                     </font>
                 </Label>
             </children>
+            <Label layoutX="427.0" layoutY="166.0" text="完成交易时间："/>
+            <Label fx:id="mDateLabel" layoutX="514.0" layoutY="166.0" prefHeight="15.0" prefWidth="84.0" text="未知"/>
         </AnchorPane>
     </children>
 </AnchorPane>

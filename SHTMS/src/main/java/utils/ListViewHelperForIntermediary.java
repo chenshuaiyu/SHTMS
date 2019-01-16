@@ -9,43 +9,42 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import main.java.Constant;
-import main.java.bean.House;
+import main.java.bean.HouseRecord;
 import main.java.db.JDBCHelper;
-import main.java.listener.ListViewListener;
-
+import main.java.listener.ListViewListenerForIntermediary;
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class ListViewHelper {
+public class ListViewHelperForIntermediary {
     private ListView listView;
-    private ListViewListener listener;
-    private ObservableList<House> list;
+    private ListViewListenerForIntermediary listener;
+    private ObservableList<HouseRecord> list;
 
-    public ListViewHelper(ListView listView) {
+    public ListViewHelperForIntermediary(ListView listView) {
         this.listView = listView;
     }
 
-    public void setListener(String sql, List<Object> params, ListViewListener listener) {
+    public void setListener(String sql, List<Object> params, ListViewListenerForIntermediary listener) {
         this.listener = listener;
 
         ResultSet resultSet = null;
         try {
-            List<House> l = new ArrayList<>();
+            List<HouseRecord> l = new ArrayList<>();
             resultSet = JDBCHelper.getInstance().executeQuery(sql, params);
             while (resultSet.next()) {
-                l.add(new House(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),
+                l.add(new HouseRecord(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),
                         resultSet.getString(5), resultSet.getString(6), resultSet.getInt(7), resultSet.getInt(8),
                         resultSet.getInt(9), resultSet.getFloat(10), resultSet.getInt(11), resultSet.getInt(12),
                         resultSet.getInt(13), resultSet.getInt(14), resultSet.getInt(15), resultSet.getInt(16),
-                        0));
+                        0, resultSet.getInt(20)));
             }
             list = FXCollections.observableArrayList(l);
             listView.setItems(list);
-            listView.setCellFactory(e -> new ListCell<House>() {
+            listView.setCellFactory(e -> new ListCell<HouseRecord>() {
                 @Override
-                protected void updateItem(House item, boolean empty) {
+                protected void updateItem(HouseRecord item, boolean empty) {
                     super.updateItem(item, empty);
 
                     if (!empty && item != null) {
@@ -83,5 +82,6 @@ public class ListViewHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }

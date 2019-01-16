@@ -10,17 +10,17 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.java.Constant;
 import main.java.db.JDBCHelper;
-import main.java.listener.ListViewListener;
+import main.java.listener.ListViewListenerForUser;
 import main.java.listener.LookHouseListener;
 import main.java.listener.QueryHouseListener;
 import main.java.bean.House;
 import main.java.controller.User.children.LookHouseController;
 import main.java.controller.User.children.QueryHouseController;
 import main.java.utils.AlertUtil;
-import main.java.utils.ListViewHelper;
-
+import main.java.utils.ListViewHelperForUser;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -35,17 +35,16 @@ public class UQueryTargetHouseController implements Initializable {
     @FXML
     private Button mQueryAllButton;
 
-    private ListViewHelper listViewHelper;
+    private ListViewHelperForUser listViewHelperForUser;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        listViewHelper = new ListViewHelper(mListView);
-        //不是自己的 且 没有完成交易 的房源
+        listViewHelperForUser = new ListViewHelperForUser(mListView);
         setHouse("SELECT * FROM House WHERE Uuid <> ? AND Hstatus = 0", Arrays.asList(Constant.ID));
     }
 
     private void setHouse(String sql, List<Object> params) {
-        listViewHelper.setListener(sql, params, new ListViewListener() {
+        listViewHelperForUser.setListener(sql, params, new ListViewListenerForUser() {
             @Override
             public void todo(House item) {
                 try {
@@ -83,8 +82,8 @@ public class UQueryTargetHouseController implements Initializable {
                         @Override
                         public void lookHouse(House h) {
                             //数据库新增预约看房记录
-                            String sql = "INSERT INTO Reservationhouse(Uuid, Hid, Ragree) VALUES(?, ?, ?)";
-                            List<Object> params = Arrays.asList(Constant.ID, h.getId(), 0);
+                            String sql = "INSERT INTO Reservationhouse(Uuid, Hid, Rdate, Ragree) VALUES(?, ?, ?, ?)";
+                            List<Object> params = Arrays.asList(Constant.ID, h.getId(), new Date(System.currentTimeMillis()), 0);
                             int result = JDBCHelper.getInstance().executeUpdate(sql, params);
                             stage.close();
                             if (result > 0) {

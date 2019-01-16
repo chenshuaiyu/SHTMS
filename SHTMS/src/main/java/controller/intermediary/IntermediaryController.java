@@ -12,7 +12,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import main.java.Constant;
 import main.java.app.MainApp;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;

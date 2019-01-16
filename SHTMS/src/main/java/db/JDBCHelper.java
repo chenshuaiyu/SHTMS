@@ -1,10 +1,8 @@
 package main.java.db;
 
 import main.java.Constant;
-
 import java.sql.*;
 import java.util.List;
-
 import static main.java.Constant.PASSWORD;
 import static main.java.Constant.URL;
 import static main.java.Constant.USER;

@@ -17,12 +17,12 @@ import main.java.controller.User.children.InputSumMoneyController;
 import main.java.db.JDBCHelper;
 import main.java.listener.InputDepositListener;
 import main.java.listener.InputSumMoneyListener;
-import main.java.listener.ListViewListener;
+import main.java.listener.ListViewListenerForUser;
 import main.java.utils.AlertUtil;
-import main.java.utils.ListViewHelper;
-
+import main.java.utils.ListViewHelperForUser;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -68,7 +68,7 @@ public class UMyFavoriteHousesController implements Initializable {
     @FXML
     public Label mStatusLabel;
 
-    private ListViewHelper listViewHelper;
+    private ListViewHelperForUser listViewHelperForUser;
 
     private House house;
 
@@ -78,8 +78,8 @@ public class UMyFavoriteHousesController implements Initializable {
         mPayDepositButton.setDisable(true);
         mCompleteButton.setDisable(true);
 
-        listViewHelper = new ListViewHelper(mListView);
-        listViewHelper.setListener("SELECT * FROM House, Reservationhouse WHERE Reservationhouse.Uuid = ? AND House.Hid = Reservationhouse.Hid;", Arrays.asList(Constant.ID), new ListViewListener() {
+        listViewHelperForUser = new ListViewHelperForUser(mListView);
+        listViewHelperForUser.setListener("SELECT * FROM House, Reservationhouse WHERE Reservationhouse.Uuid = ? AND House.Hid = Reservationhouse.Hid;", Arrays.asList(Constant.ID), new ListViewListenerForUser() {
             @Override
             public void todo(House item) {
                 house = item;
@@ -155,8 +155,8 @@ public class UMyFavoriteHousesController implements Initializable {
             controller.setListener(new InputDepositListener() {
                 @Override
                 public void confirm(int money, int liquidated) {
-                    String sql = "INSERT INTO Paydeposit(Uuid, Hid, Pmoney, Pliquidated_money, Pagree) VALUES(?, ?, ?, ?, ?)";
-                    List<Object> params = Arrays.asList(Constant.ID, house.getId(), money, liquidated, 0);
+                    String sql = "INSERT INTO Paydeposit(Uuid, Hid, Pdate, Pmoney, Pliquidated_money, Pagree) VALUES(?, ?, ?, ?, ?, ?)";
+                    List<Object> params = Arrays.asList(Constant.ID, house.getId(),new Date(System.currentTimeMillis()), money, liquidated, 0);
                     int result = JDBCHelper.getInstance().executeUpdate(sql, params);
                     stage.close();
                     if (result > 0) {
@@ -193,8 +193,8 @@ public class UMyFavoriteHousesController implements Initializable {
             controller.setListener(new InputSumMoneyListener() {
                 @Override
                 public void confirm(float sumMoney, int intermediaryCost, int type) {
-                    String sql = "INSERT INTO Completetransaction(Uuid, Hid, Csum_money, Cagree, Cintermediary_cost, Ctype) VALUES(?, ?, ?, ?, ?, ?)";
-                    List<Object> params = Arrays.asList(Constant.ID, house.getId(), sumMoney, 0, intermediaryCost, type);
+                    String sql = "INSERT INTO Completetransaction(Uuid, Hid, Cdate, Csum_money, Cagree, Cintermediary_cost, Ctype) VALUES(?, ?, ?, ?, ?, ?, ?)";
+                    List<Object> params = Arrays.asList(Constant.ID, house.getId(), new Date(System.currentTimeMillis()), sumMoney, 0, intermediaryCost, type);
                     int result = JDBCHelper.getInstance().executeUpdate(sql, params);
                     stage.close();
                     if (result > 0) {
@@ -217,17 +217,19 @@ public class UMyFavoriteHousesController implements Initializable {
     }
 
     public void mIntermediaryClicked(MouseEvent mouseEvent) {
-        ResultSet resultSet = null;
-        try {
-            resultSet = JDBCHelper.getInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
-            if (resultSet.next()) {
-                AlertUtil.alert("中介人员信息", "姓名：" + resultSet.getString(1) +
-                        "\n\n性别：" + resultSet.getString(2) +
-                        "\n\n联系方式：" + resultSet.getString(3) +
-                        "\n\nEmail：" + resultSet.getString(4));
+        if (house != null) {
+            ResultSet resultSet = null;
+            try {
+                resultSet = JDBCHelper.getInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid is not null AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
+                if (resultSet.next()) {
+                    AlertUtil.alert("中介人员信息", "姓名：" + resultSet.getString(1) +
+                            "\n\n性别：" + resultSet.getString(2) +
+                            "\n\n联系方式：" + resultSet.getString(3) +
+                            "\n\nEmail：" + resultSet.getString(4));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 

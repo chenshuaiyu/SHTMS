@@ -6,12 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.java.Constant;
-import main.java.db.JDBCHelper;
-
 import java.io.IOException;
 
 public class MainApp extends Application {
-
     private static MainApp app;
     private Stage stage;
     private Parent root;
@@ -22,11 +19,9 @@ public class MainApp extends Application {
         stage = primaryStage;
         root = FXMLLoader.load(getClass().getResource("../../resources/fxml/Login.fxml"));
         primaryStage.setTitle("二手房交易管理系统");
-        primaryStage.setScene(new Scene(root, 720, 405));
-//        primaryStage.setResizable(false);
+        primaryStage.setResizable(false);
+        primaryStage.setScene(new Scene(root, 710, 395));
         primaryStage.show();
-
-
     }
 
     public static void main(String[] args) {

@@ -21,7 +21,7 @@
         <Label layoutX="235.0" layoutY="170.0" text="面积" />
         <Label layoutX="430.0" layoutY="170.0" text="价格(万)" />
 
-        <Label layoutX="40.0" layoutY="240.0" text="物业费(万)" />
+        <Label layoutX="40.0" layoutY="240.0" text="物业费(元)" />
         <Label layoutX="235.0" layoutY="240.0" text="装修情况" />
         <Label layoutX="430.0" layoutY="240" text="车库" />
 

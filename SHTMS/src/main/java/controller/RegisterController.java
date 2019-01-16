@@ -1,19 +1,14 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import main.java.app.MainApp;
 import main.java.db.JDBCHelper;
 import main.java.utils.AlertUtil;
-
-import java.net.URL;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import static main.java.Constant.*;
 

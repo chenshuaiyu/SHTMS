@@ -12,15 +12,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.java.listener.AddHouseListener;
 import main.java.Constant;
-import main.java.listener.ListViewListener;
+import main.java.listener.ListViewListenerForUser;
 import main.java.listener.UpdateHouseListener;
 import main.java.bean.House;
 import main.java.controller.User.children.AddHouseController;
 import main.java.controller.User.children.UpdateHouseController;
 import main.java.db.JDBCHelper;
 import main.java.utils.AlertUtil;
-import main.java.utils.ListViewHelper;
-
+import main.java.utils.ListViewHelperForUser;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -32,16 +31,16 @@ public class USellHouseManagerController implements Initializable {
     private Button mAddButton;
 
     private ObservableList<House> list = null;
-    private ListViewHelper listViewHelper = null;
+    private ListViewHelperForUser listViewHelperForUser = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        listViewHelper = new ListViewHelper(mListView);
+        listViewHelperForUser = new ListViewHelperForUser(mListView);
         setHouse();
     }
 
     private void setHouse() {
-        listViewHelper.setListener("SELECT * FROM House WHERE Uuid = ?", Arrays.asList(Constant.ID), new ListViewListener() {
+        listViewHelperForUser.setListener("SELECT * FROM House WHERE Uuid = ?", Arrays.asList(Constant.ID), new ListViewListenerForUser() {
             @Override
             public void todo(House item) {
                 try {

@@ -7,15 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
 import main.java.Constant;
-import main.java.db.JDBCHelper;
 import main.java.listener.QueryHouseListener;
-import main.java.bean.House;
-
 import java.net.URL;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 

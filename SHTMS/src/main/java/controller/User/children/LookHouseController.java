@@ -9,7 +9,6 @@ import main.java.Constant;
 import main.java.bean.House;
 import main.java.db.JDBCHelper;
 import main.java.listener.LookHouseListener;
-
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;

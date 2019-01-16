@@ -9,14 +9,12 @@ import javafx.scene.input.MouseEvent;
 import main.java.Constant;
 import main.java.db.JDBCHelper;
 import main.java.utils.AlertUtil;
-
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import static main.java.Constant.AGES;
 import static main.java.Constant.SEXS;
 

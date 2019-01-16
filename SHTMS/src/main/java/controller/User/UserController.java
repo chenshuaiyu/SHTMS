@@ -12,11 +12,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import main.java.Constant;
 import main.java.app.MainApp;
-import main.java.db.JDBCHelper;
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 

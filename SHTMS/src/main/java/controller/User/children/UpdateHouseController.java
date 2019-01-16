@@ -10,7 +10,6 @@ import javafx.scene.input.MouseEvent;
 import main.java.Constant;
 import main.java.listener.UpdateHouseListener;
 import main.java.bean.House;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
