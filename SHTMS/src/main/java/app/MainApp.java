@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.java.Constant;
+import main.java.db.JDBCHelper;
 
 import java.io.IOException;
 
@@ -24,17 +25,19 @@ public class MainApp extends Application {
         primaryStage.setScene(new Scene(root, 720, 405));
 //        primaryStage.setResizable(false);
         primaryStage.show();
+
+
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    public static MainApp getApp(){
+    public static MainApp getApp() {
         return app;
     }
 
-    public void close(){
+    public void close() {
         stage.close();
     }
 

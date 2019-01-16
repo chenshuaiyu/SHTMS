@@ -1,20 +1,15 @@
 package main.java.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import main.java.Constant;
 import main.java.app.MainApp;
 import main.java.db.JDBCHelper;
 import main.java.utils.AlertUtil;
 
 import java.net.URL;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,45 +18,35 @@ import java.util.ResourceBundle;
 import static main.java.Constant.*;
 
 
-public class RegisterController implements Initializable {
+public class RegisterController {
     @FXML
-    public TextField mUsernameTextField;
+    private TextField mUsernameTextField;
     @FXML
-    public PasswordField mPasswordField;
+    private PasswordField mPasswordField;
     @FXML
-    public PasswordField mConfirmPasswordField;
+    private PasswordField mConfirmPasswordField;
     @FXML
-    public TextField mNameTextField;
+    private TextField mNameTextField;
     @FXML
-    public TextField mAgeTextField;
+    private TextField mAgeTextField;
     @FXML
-    public TextField mSexTextField;
+    private TextField mSexTextField;
     @FXML
-    public TextField mIdentityNumberTextField;
+    private TextField mIdentityNumberTextField;
     @FXML
-    public TextField mTelTextField;
+    private TextField mTelTextField;
     @FXML
-    public TextField mEmailTextField;
+    private TextField mEmailTextField;
     @FXML
-    public RadioButton mUserRadioButton;
+    private RadioButton mUserRadioButton;
     @FXML
-    public RadioButton mIntermediaryRadioButton;
+    private RadioButton mIntermediaryRadioButton;
     @FXML
-    public Button mRegisterButton;
+    private Button mRegisterButton;
     @FXML
-    public Label mLoginLabel;
+    private Label mLoginLabel;
     @FXML
-    public Label mResultLabel;
-
-    private ToggleGroup group;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        group = new ToggleGroup();
-//        mUserRadioButton.setToggleGroup(group);
-//        mIntermediaryRadioButton.setToggleGroup(group);
-//        mUserRadioButton.setSelected(true);
-    }
+    private Label mResultLabel;
 
     public void mRegisterButtonClicked(MouseEvent mouseEvent) {
         String username = mUsernameTextField.getText();
@@ -92,11 +77,11 @@ public class RegisterController implements Initializable {
             try {
                 sql = "SELECT * FROM Uuser WHERE Uusername = ?";
                 objects = Arrays.asList(username);
-                int count = JDBCHelper.getsInstance().getQueryCount(sql, objects);
+                int count = JDBCHelper.getInstance().getQueryCount(sql, objects);
                 if (count == 0) {
                     sql = "INSERT INTO Uuser VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
                     List<Object> params = Arrays.asList(username, name, sex, age, tel, email, identityNumber, password);
-                    int result = JDBCHelper.getsInstance().executeUpdate(sql, params);
+                    int result = JDBCHelper.getInstance().executeUpdate(sql, params);
                     if (result > 0) {
                         MainApp.getApp().toLogin();
                         AlertUtil.alert("注册信息", "注册成功");

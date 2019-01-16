@@ -1,8 +1,6 @@
 package main.java.controller.intermediary;
 
 import com.jfoenix.controls.JFXTextField;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,14 +9,12 @@ import javafx.scene.input.MouseEvent;
 import main.java.Constant;
 import main.java.db.JDBCHelper;
 import main.java.utils.AlertUtil;
-
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import static main.java.Constant.AGES;
 import static main.java.Constant.SEXS;
 
@@ -66,8 +62,8 @@ public class IPersonalInformationManagerController implements Initializable {
 
         String sql = "SELECT * FROM Intermediary WHERE Iusername = ? ";
         List<Object> objects = Arrays.asList(Constant.NAME);
-        resultSet = JDBCHelper.getsInstance().executeQuery(sql, objects);
-        int count = JDBCHelper.getsInstance().getQueryCount(sql, objects);
+        resultSet = JDBCHelper.getInstance().executeQuery(sql, objects);
+        int count = JDBCHelper.getInstance().getQueryCount(sql, objects);
         try {
             resultSet.next();
             getData(resultSet);
@@ -92,7 +88,7 @@ public class IPersonalInformationManagerController implements Initializable {
 
         String sql = "UPDATE Intermediary SET Iname = ?, Isex = ?, Iage = ?, Itel = ?, Iemail = ?, Iidentity_num = ? WHERE Iusername = ? ";
         List<Object> objects = Arrays.asList(name, sex, age, tel, email, identityNum, Constant.NAME);
-        int result = JDBCHelper.getsInstance().executeUpdate(sql, objects);
+        int result = JDBCHelper.getInstance().executeUpdate(sql, objects);
 
         if (result > 0) {
             setValue();

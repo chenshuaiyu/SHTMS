@@ -80,8 +80,14 @@ public class Constant {
     public static final ObservableList<String> HASGARAGE = FXCollections.observableArrayList("有", "无");
     public static final ObservableList<String> PRICE = FXCollections.observableArrayList("低于50万", "50-100万","高于100万");
     public static final ObservableList<String> AREA = FXCollections.observableArrayList("小于100㎡", "100-150㎡","大于150㎡");
+    public static final ObservableList<String> INTERMEDIARYCOSTTYPE = FXCollections.observableArrayList("卖方支付", "买方支付","双方共同支付");
 
+    //交易信息
+    public static final String UNKNOWN = "未知";
 
+    //房源状态
+    public static final String SOLD = "已售";
+    public static final String UNSOLD = "未售";
 
 
 

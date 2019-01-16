@@ -3,6 +3,7 @@ package main.java.controller.intermediary;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,6 +35,16 @@ public class IManagerTransactionInformationController implements Initializable {
     private ImageView image5;
     @FXML
     private ListView mListView;
+    @FXML
+    private Label mMoneyLabel;
+    @FXML
+    private Label mSunMoneyLabel;
+    @FXML
+    private Label mIntermediaryCostLabel;
+    @FXML
+    private Label mLiquidatedLabel;
+    @FXML
+    private Label mTypeLabel;
 
     private ListViewHelper listViewHelper;
     private House house;
@@ -50,21 +61,26 @@ public class IManagerTransactionInformationController implements Initializable {
             @Override
             public void todo(House item) {
                 house = item;
-                List<Object> rObjects = Arrays.asList(item.getId());
-                ResultSet rResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Ragree FROM Reservationhouse WHERE Reservationhouse.Hid = ?;", rObjects);
-                List<Object> pObjects = Arrays.asList(item.getId());
-                ResultSet pResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Pagree FROM Paydeposit WHERE Paydeposit.Hid = ?;", pObjects);
-                List<Object> cObjects = Arrays.asList(item.getId());
-                ResultSet cResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Cagree FROM Completetransaction WHERE Completetransaction.Hid = ?;", cObjects);
+                List<Object> objects = Arrays.asList(item.getId());
+                ResultSet rResultSet = JDBCHelper.getInstance().executeQuery("SELECT Ragree FROM Reservationhouse WHERE Reservationhouse.Hid = ?;", objects);
+                ResultSet pResultSet = JDBCHelper.getInstance().executeQuery("SELECT Pagree, Pmoney, Pliquidated_money FROM Paydeposit WHERE Paydeposit.Hid = ?;", objects);
+                ResultSet cResultSet = JDBCHelper.getInstance().executeQuery("SELECT Cagree, Csum_money, Cintermediary_cost, Ctype FROM Completetransaction WHERE Completetransaction.Hid = ?;", objects);
 
                 int rAgree = -1, pAgree = -1, cAgree = -1;
                 try {
                     if (rResultSet != null && rResultSet.next())
                         rAgree = rResultSet.getInt(1);
-                    if (pResultSet != null && pResultSet.next())
+                    if (pResultSet != null && pResultSet.next()){
                         pAgree = pResultSet.getInt(1);
-                    if (cResultSet != null && cResultSet.next())
+                        mMoneyLabel.setText(pResultSet.getInt(2) + "");
+                        mLiquidatedLabel.setText(pResultSet.getInt(3) + "");
+                    }
+                    if (cResultSet != null && cResultSet.next()){
                         cAgree = cResultSet.getInt(1);
+                        mSunMoneyLabel.setText(cResultSet.getFloat(2) + "");
+                        mIntermediaryCostLabel.setText(cResultSet.getInt(3) + "");
+                        mTypeLabel.setText(Constant.INTERMEDIARYCOSTTYPE.get(cResultSet.getInt(4)));
+                    }
 
                     System.out.println(rAgree);
                     System.out.println(pAgree);
@@ -82,7 +98,7 @@ public class IManagerTransactionInformationController implements Initializable {
     public void mIntermediaryClicked(MouseEvent mouseEvent) {
         ResultSet resultSet = null;
         try {
-            resultSet = JDBCHelper.getsInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
+            resultSet = JDBCHelper.getInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
             if (resultSet.next()) {
                 AlertUtil.alert("中介人员信息", "姓名：" + resultSet.getString(1) +
                         "\n\n性别：" + resultSet.getString(2) +

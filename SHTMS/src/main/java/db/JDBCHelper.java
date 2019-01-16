@@ -17,17 +17,17 @@ public class JDBCHelper {
     private static PreparedStatement preparedStatement = null;
 
     private JDBCHelper() {
-        init();
     }
 
     /**
-     * 初始化
+     * 加载驱动，连接数据库
      */
     private void init() {
         try {
             //加载驱动
             Class.forName(Constant.DRIVERNAME);
 //            System.out.println("加载驱动成功");
+            conn = getConnection();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("加载驱动失败");
@@ -39,18 +39,14 @@ public class JDBCHelper {
      *
      * @return sInstance
      */
-    public static JDBCHelper getsInstance() {
+    public static JDBCHelper getInstance() {
         if (null == sInstance) {
             synchronized (JDBCHelper.class) {
                 if (null == sInstance)
                     sInstance = new JDBCHelper();
             }
         }
-        try {
-            conn = DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        sInstance.init();
         return sInstance;
     }
 
@@ -62,7 +58,7 @@ public class JDBCHelper {
     public Connection getConnection() {
         try {
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("数据库连接成功");
+//            System.out.println("数据库连接成功");
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("数据库连接失败");

@@ -1,28 +1,25 @@
 package main.java.controller.User;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import main.java.Constant;
 import main.java.bean.House;
-import main.java.controller.UpdateHouseController;
+import main.java.controller.User.children.InputDepositController;
+import main.java.controller.User.children.InputSumMoneyController;
 import main.java.db.JDBCHelper;
+import main.java.listener.InputDepositListener;
+import main.java.listener.InputSumMoneyListener;
 import main.java.listener.ListViewListener;
 import main.java.utils.AlertUtil;
 import main.java.utils.ListViewHelper;
-import sun.net.www.content.audio.x_aiff;
 
 import java.io.IOException;
 import java.net.URL;
@@ -58,6 +55,18 @@ public class UMyFavoriteHousesController implements Initializable {
     private Label mPayDepositLabel;
     @FXML
     private Label mCompleteLabel;
+    @FXML
+    private Label mMoneyLabel;
+    @FXML
+    private Label mSunMoneyLabel;
+    @FXML
+    private Label mIntermediaryCostLabel;
+    @FXML
+    private Label mLiquidatedLabel;
+    @FXML
+    private Label mTypeLabel;
+    @FXML
+    public Label mStatusLabel;
 
     private ListViewHelper listViewHelper;
 
@@ -74,21 +83,28 @@ public class UMyFavoriteHousesController implements Initializable {
             @Override
             public void todo(House item) {
                 house = item;
-                List<Object> rObjects = Arrays.asList(Constant.ID, item.getId());
-                ResultSet rResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Ragree FROM House, Reservationhouse WHERE Reservationhouse.Uuid = ? AND Reservationhouse.Hid = ?;", rObjects);
-                List<Object> pObjects = Arrays.asList(Constant.ID, item.getId());
-                ResultSet pResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Pagree FROM House, Paydeposit WHERE Paydeposit.Uuid = ? AND Paydeposit.Hid = ?;", pObjects);
-                List<Object> cObjects = Arrays.asList(Constant.ID, item.getId());
-                ResultSet cResultSet = JDBCHelper.getsInstance().executeQuery("SELECT Cagree FROM House, Completetransaction WHERE Completetransaction.Uuid = ? AND Completetransaction.Hid = ?;", cObjects);
+
+                initLabel();
+                List<Object> objects = Arrays.asList(Constant.ID, item.getId());
+                ResultSet rResultSet = JDBCHelper.getInstance().executeQuery("SELECT Ragree FROM House, Reservationhouse WHERE Reservationhouse.Uuid = ? AND Reservationhouse.Hid = ?;", objects);
+                ResultSet pResultSet = JDBCHelper.getInstance().executeQuery("SELECT Pagree, Pmoney, Pliquidated_money FROM House, Paydeposit WHERE Paydeposit.Uuid = ? AND Paydeposit.Hid = ?;", objects);
+                ResultSet cResultSet = JDBCHelper.getInstance().executeQuery("SELECT Cagree, Csum_money, Cintermediary_cost, Ctype FROM House, Completetransaction WHERE Completetransaction.Uuid = ? AND Completetransaction.Hid = ?;", objects);
 
                 int rAgree = -1, pAgree = -1, cAgree = -1;
                 try {
                     if (rResultSet != null && rResultSet.next())
                         rAgree = rResultSet.getInt(1);
-                    if (pResultSet != null && pResultSet.next())
+                    if (pResultSet != null && pResultSet.next()) {
                         pAgree = pResultSet.getInt(1);
-                    if (cResultSet != null && cResultSet.next())
+                        mMoneyLabel.setText(pResultSet.getInt(2) + "");
+                        mLiquidatedLabel.setText(pResultSet.getInt(3) + "");
+                    }
+                    if (cResultSet != null && cResultSet.next()) {
                         cAgree = cResultSet.getInt(1);
+                        mSunMoneyLabel.setText(cResultSet.getFloat(2) + "");
+                        mIntermediaryCostLabel.setText(cResultSet.getInt(3) + "");
+                        mTypeLabel.setText(Constant.INTERMEDIARYCOSTTYPE.get(cResultSet.getInt(4)));
+                    }
 
                     System.out.println(rAgree);
                     System.out.println(pAgree);
@@ -98,9 +114,29 @@ public class UMyFavoriteHousesController implements Initializable {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-
             }
         });
+
+        //判断房源状态
+        ResultSet resultSet = null;
+        try {
+            resultSet = JDBCHelper.getInstance().executeQuery("SELECT Hstatus FROM House WHERE Hid = ?", Arrays.asList(house.getId()));
+            resultSet.next();
+            int status = resultSet.getInt(1);
+            if (status == 1) {
+                mLookHouseButton.setDisable(true);
+                mPayDepositButton.setDisable(true);
+                mCompleteButton.setDisable(true);
+                mStatusLabel.setText(Constant.SOLD);
+                mLookHouseLabel.setVisible(false);
+                mPayDepositLabel.setVisible(false);
+                mCompleteLabel.setVisible(false);
+            } else {
+                mStatusLabel.setText(Constant.UNSOLD);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -110,35 +146,85 @@ public class UMyFavoriteHousesController implements Initializable {
     }
 
     public void mPayDepositButtonClicked(MouseEvent mouseEvent) {
-        String sql = "INSERT INTO Paydeposit(Uuid, Hid, Pmoney, Pliquidated_money, Pagree) VALUES(?, ?, ?, ?, ?)";
-        List<Object> params = Arrays.asList(Constant.ID, house.getId(), 10000, 1000, 0);
-        int result = JDBCHelper.getsInstance().executeUpdate(sql, params);
-        if (result > 0) {
-            mPayDepositButton.setDisable(true);
-            AlertUtil.alert("预约信息", "预约付定金成功");
-            mPayDepositLabel.setVisible(true);
-        } else {
-            AlertUtil.alert("预约信息", "预约付定金失败");
+        try {
+            Stage stage = new Stage();
+            stage.setTitle("填写定金信息");
+            stage.setAlwaysOnTop(true);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../../../resources/fxml/user/children/InputDeposit.fxml"));
+            AnchorPane pane = loader.load();
+            InputDepositController controller = loader.getController();
+            stage.setScene(new Scene(pane));
+            stage.show();
+
+            controller.setListener(new InputDepositListener() {
+                @Override
+                public void confirm(int money, int liquidated) {
+                    String sql = "INSERT INTO Paydeposit(Uuid, Hid, Pmoney, Pliquidated_money, Pagree) VALUES(?, ?, ?, ?, ?)";
+                    List<Object> params = Arrays.asList(Constant.ID, house.getId(), money, liquidated, 0);
+                    int result = JDBCHelper.getInstance().executeUpdate(sql, params);
+                    stage.close();
+                    if (result > 0) {
+                        mPayDepositButton.setDisable(true);
+                        AlertUtil.alert("预约信息", "预约付定金成功");
+                        mPayDepositLabel.setVisible(true);
+                    } else {
+                        AlertUtil.alert("预约信息", "预约付定金失败");
+                    }
+                }
+
+                @Override
+                public void cancel() {
+                    stage.close();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public void mCompleteButtonClicked(MouseEvent mouseEvent) {
-        String sql = "INSERT INTO Completetransaction(Uuid, Hid, Csum_money, Cagree, Cintermediary_cost, Ctype) VALUES(?, ?, ?, ?, ?, ?)";
-        List<Object> params = Arrays.asList(Constant.ID, house.getId(), 10, 0, 1000, 1);
-        int result = JDBCHelper.getsInstance().executeUpdate(sql, params);
-        if (result > 0) {
-            mCompleteButton.setDisable(true);
-            AlertUtil.alert("预约信息", "预约交付全款成功");
-            mCompleteLabel.setVisible(true);
-        } else {
-            AlertUtil.alert("预约信息", "预约交付全款失败");
+        try {
+            Stage stage = new Stage();
+            stage.setTitle("填写全款信息");
+            stage.setAlwaysOnTop(true);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../../../resources/fxml/user/children/InputSumMoney.fxml"));
+            AnchorPane pane = loader.load();
+            InputSumMoneyController controller = loader.getController();
+            stage.setScene(new Scene(pane));
+            stage.show();
+
+            controller.setListener(new InputSumMoneyListener() {
+                @Override
+                public void confirm(float sumMoney, int intermediaryCost, int type) {
+                    String sql = "INSERT INTO Completetransaction(Uuid, Hid, Csum_money, Cagree, Cintermediary_cost, Ctype) VALUES(?, ?, ?, ?, ?, ?)";
+                    List<Object> params = Arrays.asList(Constant.ID, house.getId(), sumMoney, 0, intermediaryCost, type);
+                    int result = JDBCHelper.getInstance().executeUpdate(sql, params);
+                    stage.close();
+                    if (result > 0) {
+                        mCompleteButton.setDisable(true);
+                        AlertUtil.alert("预约信息", "预约交付全款成功");
+                        mCompleteLabel.setVisible(true);
+                    } else {
+                        AlertUtil.alert("预约信息", "预约交付全款失败");
+                    }
+                }
+
+                @Override
+                public void cancel() {
+                    stage.close();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public void mIntermediaryClicked(MouseEvent mouseEvent) {
         ResultSet resultSet = null;
         try {
-            resultSet = JDBCHelper.getsInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
+            resultSet = JDBCHelper.getInstance().executeQuery("SELECT Iname, Isex, Itel, Iemail FROM House, Intermediary WHERE House.Hid = ? AND House.Iid = Intermediary.Iid", Arrays.asList(house.getId()));
             if (resultSet.next()) {
                 AlertUtil.alert("中介人员信息", "姓名：" + resultSet.getString(1) +
                         "\n\n性别：" + resultSet.getString(2) +
@@ -148,6 +234,14 @@ public class UMyFavoriteHousesController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initLabel() {
+        mMoneyLabel.setText(Constant.UNKNOWN);
+        mSunMoneyLabel.setText(Constant.UNKNOWN);
+        mIntermediaryCostLabel.setText(Constant.UNKNOWN);
+        mLiquidatedLabel.setText(Constant.UNKNOWN);
+        mTypeLabel.setText(Constant.UNKNOWN);
     }
 
     public void setFlag(int rAgree, int pAgree, int cAgree) {

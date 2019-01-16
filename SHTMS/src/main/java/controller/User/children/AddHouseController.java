@@ -1,4 +1,4 @@
-package main.java.controller;
+package main.java.controller.User.children;
 
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
@@ -58,11 +58,8 @@ public class AddHouseController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ObservableList<String> isDecorated = FXCollections.observableArrayList("是", "否");
-        ObservableList<String> hasGarage = FXCollections.observableArrayList("有", "无");
-
-        mIsDecoratedTextField.setItems(isDecorated);
-        mHasGarageTextField.setItems(hasGarage);
+        mIsDecoratedTextField.setItems(Constant.ISDECORATED);
+        mHasGarageTextField.setItems(Constant.HASGARAGE);
     }
 
     public void mAddButtonClicked(MouseEvent mouseEvent) {

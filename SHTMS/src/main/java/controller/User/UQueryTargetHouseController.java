@@ -14,8 +14,8 @@ import main.java.listener.ListViewListener;
 import main.java.listener.LookHouseListener;
 import main.java.listener.QueryHouseListener;
 import main.java.bean.House;
-import main.java.controller.LookHouseController;
-import main.java.controller.QueryHouseController;
+import main.java.controller.User.children.LookHouseController;
+import main.java.controller.User.children.QueryHouseController;
 import main.java.utils.AlertUtil;
 import main.java.utils.ListViewHelper;
 
@@ -32,13 +32,16 @@ public class UQueryTargetHouseController implements Initializable {
     private ListView mListView;
     @FXML
     private Button mQueryButton;
+    @FXML
+    private Button mQueryAllButton;
+
     private ListViewHelper listViewHelper;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listViewHelper = new ListViewHelper(mListView);
-        setHouse("SELECT * FROM House WHERE Uuid <> ?", Arrays.asList(Constant.ID));
-
+        //不是自己的 且 没有完成交易 的房源
+        setHouse("SELECT * FROM House WHERE Uuid <> ? AND Hstatus = 0", Arrays.asList(Constant.ID));
     }
 
     private void setHouse(String sql, List<Object> params) {
@@ -49,7 +52,7 @@ public class UQueryTargetHouseController implements Initializable {
                     Stage stage = new Stage();
                     stage.setAlwaysOnTop(true);
                     FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource("../../../resources/fxml/LookHouse.fxml"));
+                    loader.setLocation(getClass().getResource("../../../resources/fxml/user/children/LookHouse.fxml"));
                     loader.setResources(new ResourceBundle() {
                         @Override
                         protected Object handleGetObject(String key) {
@@ -82,7 +85,7 @@ public class UQueryTargetHouseController implements Initializable {
                             //数据库新增预约看房记录
                             String sql = "INSERT INTO Reservationhouse(Uuid, Hid, Ragree) VALUES(?, ?, ?)";
                             List<Object> params = Arrays.asList(Constant.ID, h.getId(), 0);
-                            int result = JDBCHelper.getsInstance().executeUpdate(sql, params);
+                            int result = JDBCHelper.getInstance().executeUpdate(sql, params);
                             stage.close();
                             if (result > 0) {
                                 AlertUtil.alert("预约信息", "预约看房成功");
@@ -102,8 +105,6 @@ public class UQueryTargetHouseController implements Initializable {
                 }
             }
         });
-
-
     }
 
     public void mQueryButtonClicked(MouseEvent mouseEvent) {
@@ -111,7 +112,7 @@ public class UQueryTargetHouseController implements Initializable {
             Stage stage = new Stage();
             stage.setAlwaysOnTop(true);
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("../../../resources/fxml/QueryHouse.fxml"));
+            loader.setLocation(getClass().getResource("../../../resources/fxml/user/children/QueryHouse.fxml"));
             AnchorPane pane = loader.load();
             QueryHouseController controller = loader.getController();
             stage.setScene(new Scene(pane));
@@ -119,13 +120,10 @@ public class UQueryTargetHouseController implements Initializable {
 
             controller.setQueryHouseListener(new QueryHouseListener() {
                 @Override
-                public void query(String sql, List<Object> params) {
-
-//                    setHouse(sql, params);
-
-
-
-
+                public void query(String sql) {
+                    sql += " Uuid <> " + Constant.ID + " AND Hstatus = 0;";
+                    System.out.println(sql);
+                    setHouse(sql, Arrays.asList());
                     stage.close();
                 }
 
@@ -139,4 +137,9 @@ public class UQueryTargetHouseController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void mQueryAllButtonClicked(MouseEvent mouseEvent) {
+        setHouse("SELECT * FROM House WHERE Uuid <> ? AND Hstatus = 0", Arrays.asList(Constant.ID));
+    }
+
 }

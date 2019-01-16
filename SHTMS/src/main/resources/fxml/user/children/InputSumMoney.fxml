@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="246.0" prefWidth="342.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.User.children.InputSumMoneyController">
+    <JFXTextField fx:id="mSumMoneyTextField" layoutX="124.0" layoutY="28.0" />
+    <JFXTextField fx:id="mIntermediaryCostTextField" layoutX="124.0" layoutY="77.0" />
+    <ChoiceBox fx:id="mTypeChoiceBox" layoutX="124.0" layoutY="126.0" prefHeight="23.0" prefWidth="147.0" />
+    <Label layoutX="42.0" layoutY="35.0" text="全款(万)" />
+    <Label layoutX="42.0" layoutY="84.0" text="中介费(元)" />
+    <Label layoutX="42.0" layoutY="130.0" text="中介费支付方" />
+    <Button fx:id="mConfirmButton" layoutX="80.0" layoutY="182.0" mnemonicParsing="false" onMouseClicked="#mConfirmButtonClicked" prefHeight="30.0" prefWidth="62.0" text="确认" />
+    <Button fx:id="mCancelButton" layoutX="188.0" layoutY="182.0" mnemonicParsing="false" onMouseClicked="#mCancelButtonClicked" prefHeight="30.0" prefWidth="62.0" text="取消" />
+
+</AnchorPane>

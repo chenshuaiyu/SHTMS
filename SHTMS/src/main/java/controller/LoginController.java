@@ -57,22 +57,24 @@ public class LoginController implements Initializable {
                 if (roleType == USER_TYPE) {
                     sql = "SELECT * FROM Uuser WHERE Uusername = ? AND Upassword = ?";
                     objects = Arrays.asList(username, password);
-                    ResultSet resultSet = JDBCHelper.getsInstance().executeQuery(sql, objects);
+                    ResultSet resultSet = JDBCHelper.getInstance().executeQuery(sql, objects);
                     if (resultSet.next()) {
                         Constant.ID = resultSet.getInt(1);
                         Constant.NAME = username;
                         Constant.ROLE = USER_TYPE;
+                        //跳转到用户主页
                         MainApp.getApp().toUser();
                     } else
                         setResult(true, USERNAMEORPASSWORDISERROR);
                 } else {
                     sql = "SELECT * FROM Intermediary WHERE Iusername = ? AND Ipassword = ?";
                     objects = Arrays.asList(username, password);
-                    ResultSet resultSet = JDBCHelper.getsInstance().executeQuery(sql, objects);
+                    ResultSet resultSet = JDBCHelper.getInstance().executeQuery(sql, objects);
                     if (resultSet.next()) {
                         Constant.ID = resultSet.getInt(1);
                         Constant.NAME = username;
                         Constant.ROLE = INTERMEDIARY_TYPE;
+                        //跳转到中介人员主页
                         MainApp.getApp().toIntermediary();
                     } else
                         setResult(true, USERNAMEORPASSWORDISERROR);
@@ -89,6 +91,7 @@ public class LoginController implements Initializable {
     }
 
     public void mRegisterLabelClicked(MouseEvent mouseEvent) {
+        //跳转到注册主页
         MainApp.getApp().toRegister();
     }
 }

@@ -17,10 +17,7 @@ import main.java.listener.ListViewListener;
 import java.sql.ResultSet;
 import java.util.*;
 
-/**
- * Coder : chenshuaiyu
- * Time : 2019/1/13 13:44
- */
+
 public class ListViewHelper {
     private ListView listView;
     private ListViewListener listener;
@@ -28,19 +25,19 @@ public class ListViewHelper {
 
     public ListViewHelper(ListView listView) {
         this.listView = listView;
-
     }
 
     public void setListener(String sql, List<Object> params, ListViewListener listener) {
         this.listener = listener;
+
         ResultSet resultSet = null;
         try {
             List<House> l = new ArrayList<>();
-            resultSet = JDBCHelper.getsInstance().executeQuery(sql, params);
+            resultSet = JDBCHelper.getInstance().executeQuery(sql, params);
             while (resultSet.next()) {
                 l.add(new House(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),
                         resultSet.getString(5), resultSet.getString(6), resultSet.getInt(7), resultSet.getInt(8),
-                        resultSet.getInt(9), resultSet.getFloat(10), Constant.ID, resultSet.getInt(12),
+                        resultSet.getInt(9), resultSet.getFloat(10), resultSet.getInt(11), resultSet.getInt(12),
                         resultSet.getInt(13), resultSet.getInt(14), resultSet.getInt(15), resultSet.getInt(16),
                         0));
             }
@@ -50,6 +47,7 @@ public class ListViewHelper {
                 @Override
                 protected void updateItem(House item, boolean empty) {
                     super.updateItem(item, empty);
+
                     if (!empty && item != null) {
                         Label l1 = new Label(item.getProvince() + item.getCity() + item.getCounty());
                         l1.setPrefSize(120, 15);

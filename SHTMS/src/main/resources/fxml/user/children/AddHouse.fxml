@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.UpdateHouseController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.User.children.AddHouseController">
     <children>
         <Label layoutX="40.0" layoutY="30.0" text="省份" />
         <Label layoutX="235.0" layoutY="30.0" text="市" />
@@ -18,10 +18,10 @@
         <Label layoutX="430.0" layoutY="100.0" text="层" />
 
         <Label layoutX="40.0" layoutY="170.0" text="门牌号" />
-        <Label layoutX="235.0" layoutY="170.0" text="面积" />
-        <Label layoutX="430.0" layoutY="170.0" text="价格" />
+        <Label layoutX="235.0" layoutY="170.0" text="面积(㎡)" />
+        <Label layoutX="430.0" layoutY="170.0" text="价格(万)" />
 
-        <Label layoutX="40.0" layoutY="240.0" text="物业费" />
+        <Label layoutX="40.0" layoutY="240.0" text="物业费(元)" />
         <Label layoutX="235.0" layoutY="240.0" text="装修情况" />
         <Label layoutX="430.0" layoutY="240" text="车库" />
 
@@ -41,29 +41,23 @@
         <JFXTextField fx:id="mPriceTextField" layoutX="430.0" layoutY="190.0" />
 
         <JFXTextField fx:id="mPropertyCostTextField" layoutX="40.0" layoutY="260.0" />
-        <ChoiceBox fx:id="mIsDecoratedChoiceBox" layoutX="235.0" layoutY="260.0" prefWidth="150.0" visible="false" />
-        <ChoiceBox fx:id="mHasGarageChoiceBox" layoutX="430.0" layoutY="260.0" prefWidth="150.0" visible="false" />
-        <JFXTextField fx:id="mIsDecoratedTextField" layoutX="235.0" layoutY="260.0" prefWidth="150.0" />
-        <JFXTextField fx:id="mHasGarageTextField" layoutX="430.0" layoutY="260.0" prefWidth="150.0" />
-
+        <ChoiceBox fx:id="mIsDecoratedTextField" layoutX="235.0" layoutY="260.0" prefWidth="150.0" />
+        <ChoiceBox fx:id="mHasGarageTextField" layoutX="430.0" layoutY="260.0" prefWidth="150.0" />
 
         <JFXTextField fx:id="mRoomTextField" layoutX="40.0" layoutY="330.0" />
         <JFXTextField fx:id="mLivingRoomTextField" layoutX="235.0" layoutY="330.0" />
 
-        <Button fx:id="mUpdateButton" layoutX="470.0" layoutY="326.0" mnemonicParsing="false" onMouseClicked="#mUpdateButtonClicked" prefHeight="32.0" prefWidth="68.0" style="-fx-background-color: #4f75ff;" text="修   改">
+
+        <Button fx:id="mAddButton" layoutX="426.0" layoutY="344.0" mnemonicParsing="false" onMouseClicked="#mAddButtonClicked" prefHeight="32.0" prefWidth="68.0" style="-fx-background-color: #4f75ff;" text="新  增">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="mCompleteButton" visible="false" layoutX="411.0" layoutY="326.0" mnemonicParsing="false" onMouseClicked="#mCompleteButtonClicked" prefHeight="32.0" prefWidth="68.0" style="-fx-background-color: #4f75ff;" text="完   成">
+        <Button fx:id="mCancelButton" layoutX="518.0" layoutY="344.0" mnemonicParsing="false" onMouseClicked="#mCancelButtonClicked" prefHeight="32.0" prefWidth="68.0" style="-fx-background-color: #4f75ff;" text="取  消">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="mCancelButton" visible="false" layoutX="512.0" layoutY="326.0" mnemonicParsing="false" onMouseClicked="#mCancelButtonClicked" prefHeight="32.0" prefWidth="68.0" style="-fx-background-color: #4f75ff;" text="取   消" >
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
+
     </children>
 </AnchorPane>

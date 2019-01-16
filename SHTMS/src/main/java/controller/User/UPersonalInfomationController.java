@@ -13,7 +13,6 @@ import main.java.utils.AlertUtil;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -63,10 +62,9 @@ public class UPersonalInfomationController implements Initializable {
         mSexChoiceBox.setItems(SEXS);
         mAgeChoiceBox.setItems(AGES);
 
-        String sql = "SELECT * FROM Uuser WHERE Uusername = ? ";
+        String sql = "SELECT * FROM Uuser WHERE Uusername = ?";
         List<Object> objects = Arrays.asList(Constant.NAME);
-        resultSet = JDBCHelper.getsInstance().executeQuery(sql, objects);
-        int count = JDBCHelper.getsInstance().getQueryCount(sql, objects);
+        resultSet = JDBCHelper.getInstance().executeQuery(sql, objects);
         try {
             resultSet.next();
             getData(resultSet);
@@ -92,7 +90,7 @@ public class UPersonalInfomationController implements Initializable {
 
         String sql = "UPDATE Uuser SET Uname = ?, Usex = ?, Uage = ?, Utel = ?, Uemail = ?, Uidentity_num = ? WHERE Uusername = ? ";
         List<Object> objects = Arrays.asList(name, sex, age, tel, email, identityNum, Constant.NAME);
-        int result = JDBCHelper.getsInstance().executeUpdate(sql, objects);
+        int result = JDBCHelper.getInstance().executeUpdate(sql, objects);
 
         if (result > 0) {
             setValue();

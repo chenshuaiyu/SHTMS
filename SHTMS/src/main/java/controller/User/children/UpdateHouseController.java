@@ -1,4 +1,4 @@
-package main.java.controller;
+package main.java.controller.User.children;
 
 
 import com.jfoenix.controls.JFXTextField;
@@ -15,7 +15,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class UpdateHouseController implements Initializable {
-
     @FXML
     private JFXTextField mProvinceTextField;
     @FXML
@@ -59,10 +58,6 @@ public class UpdateHouseController implements Initializable {
 
     private UpdateHouseListener listener;
 
-    public void setHouse(House item) {
-        house = item;
-    }
-
     public void setUpdateHouseListener(UpdateHouseListener l) {
         listener = l;
     }
@@ -70,11 +65,11 @@ public class UpdateHouseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setEditable(false);
+
         mIsDecoratedChoiceBox.setItems(Constant.ISDECORATED);
         mHasGarageChoiceBox.setItems(Constant.HASGARAGE);
 
         house = (House) resources.getObject("House");
-
         setValue();
     }
 
@@ -100,6 +95,7 @@ public class UpdateHouseController implements Initializable {
 
         mRoomTextField.setEditable(value);
         mLivingRoomTextField.setEditable(value);
+
         mCompleteButton.setVisible(value);
         mCancelButton.setVisible(value);
         mUpdateButton.setVisible(!value);
@@ -110,8 +106,6 @@ public class UpdateHouseController implements Initializable {
     }
 
     public void mCompleteButtonClicked(MouseEvent mouseEvent) {
-        setEditable(false);
-
         String province = mProvinceTextField.getText();
         String city = mCityTextField.getText();
         String county = mCountyTextField.getText();
@@ -122,8 +116,10 @@ public class UpdateHouseController implements Initializable {
         int area = Integer.parseInt(mAreaTextField.getText());
         float price = Float.parseFloat(mPriceTextField.getText());
         int propertyCost = Integer.parseInt(mPropertyCostTextField.getText());
+
         int isDecorated = mIsDecoratedChoiceBox.getSelectionModel().getSelectedIndex() == 0 ? 1 : 0;
         int hasGarage = mHasGarageChoiceBox.getSelectionModel().getSelectedIndex() == 0 ? 1 : 0;
+
         int room = Integer.parseInt(mRoomTextField.getText());
         int livingRoom = Integer.parseInt(mLivingRoomTextField.getText());
 
@@ -131,7 +127,6 @@ public class UpdateHouseController implements Initializable {
     }
 
     public void mCancelButtonClicked(MouseEvent mouseEvent) {
-        setEditable(false);
         listener.cancel();
     }
 
@@ -146,10 +141,12 @@ public class UpdateHouseController implements Initializable {
         mAreaTextField.setText(house.getArea() + "");
         mPriceTextField.setText(house.getPrice() + "");
         mPropertyCostTextField.setText(house.getPropertyCost() + "");
+
         mIsDecoratedTextField.setText(Constant.ISDECORATED.get(house.getIsDecorated() == 1 ? 0 : 1));
         mIsDecoratedChoiceBox.getSelectionModel().select(house.getIsDecorated() == 1 ? 0 : 1);
         mHasGarageTextField.setText(Constant.HASGARAGE.get(house.getHasGarage() == 1 ? 0 : 1));
         mHasGarageChoiceBox.getSelectionModel().select(house.getHasGarage() == 1 ? 0 : 1);
+
         mRoomTextField.setText(house.getRoomNum() + "");
         mLivingRoomTextField.setText(house.getLivingRoomNum() + "");
     }

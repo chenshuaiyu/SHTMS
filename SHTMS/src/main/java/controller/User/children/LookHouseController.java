@@ -1,4 +1,4 @@
-package main.java.controller;
+package main.java.controller.User.children;
 
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
@@ -17,10 +17,7 @@ import java.util.ResourceBundle;
 
 import static main.java.Constant.HOUSEALREADYRESERVED;
 
-/**
- * Coder : chenshuaiyu
- * Time : 2019/1/12 9:35
- */
+
 public class LookHouseController implements Initializable {
     @FXML
     private JFXTextField mProvinceTextField;
@@ -70,7 +67,7 @@ public class LookHouseController implements Initializable {
 
         String sql = "SELECT * FROM Reservationhouse WHERE Uuid = ? AND Hid = ?";
         List<Object> objects = Arrays.asList(Constant.ID, house.getId());
-        int count = JDBCHelper.getsInstance().getQueryCount(sql, objects);
+        int count = JDBCHelper.getInstance().getQueryCount(sql, objects);
         if (count > 0) {
             setDisable();
         }
