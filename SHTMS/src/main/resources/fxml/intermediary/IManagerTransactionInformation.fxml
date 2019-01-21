@@ -125,9 +125,9 @@
                         <Font size="14.0"/>
                     </font>
                 </Label>
+                <Label layoutX="427.0" layoutY="166.0" text="完成交易时间："/>
+                <Label fx:id="mDateLabel" layoutX="514.0" layoutY="166.0" prefHeight="15.0" prefWidth="84.0" text="未知"/>
             </children>
-            <Label layoutX="427.0" layoutY="166.0" text="完成交易时间："/>
-            <Label fx:id="mDateLabel" layoutX="514.0" layoutY="166.0" prefHeight="15.0" prefWidth="84.0" text="未知"/>
         </AnchorPane>
     </children>
 </AnchorPane>

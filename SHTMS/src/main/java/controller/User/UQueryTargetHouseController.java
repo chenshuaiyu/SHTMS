@@ -49,6 +49,7 @@ public class UQueryTargetHouseController implements Initializable {
             public void todo(House item) {
                 try {
                     Stage stage = new Stage();
+                    stage.setTitle("预约房源");
                     stage.setAlwaysOnTop(true);
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(getClass().getResource("../../../resources/fxml/user/children/LookHouse.fxml"));
@@ -73,6 +74,7 @@ public class UQueryTargetHouseController implements Initializable {
                             };
                         }
                     });
+
                     AnchorPane pane = loader.load();
                     LookHouseController controller = loader.getController();
                     stage.setScene(new Scene(pane));
@@ -109,6 +111,7 @@ public class UQueryTargetHouseController implements Initializable {
     public void mQueryButtonClicked(MouseEvent mouseEvent) {
         try {
             Stage stage = new Stage();
+            stage.setTitle("条件查询");
             stage.setAlwaysOnTop(true);
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("../../../resources/fxml/user/children/QueryHouse.fxml"));
